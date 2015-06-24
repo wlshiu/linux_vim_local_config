@@ -49,7 +49,11 @@ highlight default link TagbarKind       Identifier
 highlight default link TagbarNestedKind TagbarKind
 highlight default link TagbarScope      Title
 highlight default link TagbarType       Type
-highlight default link TagbarSignature  SpecialKey
+
+" highlight default link TagbarSignature  SpecialKey
+hi mySpecialKey ctermfg=77  guifg=#5fdf5f
+highlight default link TagbarSignature  mySpecialKey
+
 highlight default link TagbarPseudoID   NonText
 highlight default link TagbarFoldIcon   Statement
 highlight default link TagbarHighlight  Search
