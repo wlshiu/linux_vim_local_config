@@ -1,51 +1,8 @@
-" if (&term == "xterm")
-	let &t_Co=256
-	let &t_AF="\e[38;5;%dm"
-	let &t_AB="\e[48;5;%dm"
-" endif
-
-"/***************************************************************
-"* Function
-"***************************************************************/
-" set diffexpr=MyDiff()
-" function MyDiff()
-"     let opt = '-a --binary '
-"     if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-"     if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-"     let arg1 = v:fname_in
-"     if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-"     let arg2 = v:fname_new
-"     if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-"     let arg3 = v:fname_out
-"     if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-"     if $VIMRUNTIME =~ ' '
-"         if &sh =~ '\<cmd'
-"             if empty(&shellxquote)
-"                 let l:shxq_sav = ''
-"                 set shellxquote&
-"             endif
-"             let cmd = '"' . $VIMRUNTIME . '\diff"'
-"         else
-"             let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-"         endif
-"     else
-"       let cmd = $VIMRUNTIME . '\diff'
-"     endif
-"     silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
-"     if exists('l:shxq_sav')
-"         let &shellxquote=l:shxq_sav
-"     endif
-" endfunction
-
-" set encoding=utf-8
-" set fileencodings=utf-8,cp950
-" set fileencoding=utf-8
-" set termencoding=utf-8
-" source $VIMRUNTIME/delmenu.vim
-" source $VIMRUNTIME/menu.vim
-" language messages zh_tw.utf-8
-
-set lines=42 columns=140
+set t_Co=256
+set encoding=utf-8
+set fileencodings=utf-8,cp950
+set fileencoding=utf-8
+set termencoding=utf-8
 
 syntax on
 
@@ -67,18 +24,21 @@ set foldcolumn=3
 set fileformat=unix
 set autoread
 set ignorecase
-"set autochdir
+set autochdir
+set hlsearch
 
-set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
-"              | | | | |  |   |      |  |     |    |
-"              | | | | |  |   |      |  |     |    + current
-"              | | | | |  |   |      |  |     |       column
-"              | | | | |  |   |      |  |     +-- current line
-"              | | | | |  |   |      |  +-- current % into file
-"              | | | | |  |   |      +-- current syntax in
-"              | | | | |  |   |          square brackets
-"              | | | | |  |   +-- current fileformat
-"              | | | | |  +-- number of lines
+
+
+set statusline=%F%m%r%h%w\ [%{&ff}]%y[%p%%][%04l/%L,%04v]
+"              | | | | |    |      |  |     |    |  |
+"              | | | | |    |      |  |     |    |  + current column
+"              | | | | |    |      |  |     |    +-- number of lines
+"              | | | | |    |      |  |     +-- current line
+"              | | | | |    |      |  |
+"              | | | | |    |      |  +-- current % into file
+"              | | | | |    |      +-- current syntax in square brackets
+"              | | | | |    |
+"              | | | | |    +-- current fileformat
 "              | | | | +-- preview flag in square brackets
 "              | | | +-- help flag in square brackets
 "              | | +-- readonly flag in square brackets
@@ -89,6 +49,18 @@ if version >= 700
     au InsertEnter * hi StatusLine ctermbg=100 guibg=#818D29 ctermfg=254 guifg=#FCFCFC gui=none
     au InsertLeave * hi StatusLine ctermbg=251 guibg=#EEEEEE ctermfg=233 guifg=#363636 gui=none
 endif
+
+let &t_ti.="\e[1 q"
+let &t_SI.="\e[5 q"
+let &t_EI.="\e[1 q"
+let &t_te.="\e[0 q"
+
+"// set height light word
+" nmap <leader>m: syn match TempKeyword /\<<C-R>=expand("<cword>")<CR>\>/<CR>
+" nmap <leader>c: syn clear TempKeyword<CR>
+"nmap <leader>m :call matchadd("TempKeyword", "<C-R>=expand("<cword>")<CR>")<CR>
+"nmap <leader>c :call clearmatches()<CR>
+hi TempKeyword    ctermfg=0 ctermbg=149
 
 "// Smart way to move between windows
 map <C-j> <C-W>j
@@ -108,37 +80,99 @@ let g:tagbar_autoopen = 1
 "// hot key
 nmap tl :TagbarToggle<CR>
 
-" ----------- tagbar ---------------------
+" ----------- NERDTree ---------------------
 let NERDTreeWinPos='right'
 let NERDTreeQuitOnOpen=1
 let NERDChristmasTree=1
 let NERDTreeHighlightCursorline=1
+
+let g:NERDTreeDirArrows=0
+"// only show
+let NERDTreeIgnore = ['\(\.c\|\.h\|\.cpp\|\.hh\)\@<!$[[file]]']
+let NERDTreeIgnore += ['\.o$','\.a$']
+
 nmap nt :NERDTreeToggle<CR>
 " nmap <A-n> :NERDTreeToggle<CR>
 
 
-" 按 F8 可以切換是否高亮度顯示搜尋字串
-map <F8> :set hls!<BAR>set hls?<CR>
-
+" ----------- vimdiff ---------------------
 if &diff
     set cursorline
     set wrap
     hi CursorLine   ctermfg=Black ctermbg=206 guifg=Black guibg=206
-    hi diffLine     ctermfg=Black ctermbg=93 guifg=Black guibg=206
+    " hi diffLine     ctermfg=Black ctermbg=93 guifg=Black guibg=206
 
-    " 設定各種差異時，標示的顏色
-    " Add 代表新增的一行， Delete 代表刪除的一行，
-    " Change 代表有差異的一行，Text 代表有差異的這一行中，具有差異的部份
-    hi DiffAdd ctermfg=White ctermbg=21 guifg=White  guibg=21
-    " hi DiffDelete ctermfg=Grey ctermbg=DarkRed guifg=Grey
-    hi diffRemoved ctermfg=Grey ctermbg=Grey guifg=Grey
-    hi DiffChange ctermfg=Black ctermbg=178 guifg=Black guibg=#FFCC22
-    hi DiffText ctermfg=Black ctermbg=222 guifg=Black guibg=#FFFF77
+    " hi DiffAdd ctermfg=White ctermbg=21 guifg=White  guibg=21
+    " hi diffRemoved ctermfg=Grey ctermbg=Grey guifg=Grey
+    " hi DiffChange ctermfg=Black ctermbg=178 guifg=Black guibg=#FFCC22
+    " hi DiffText ctermfg=Black ctermbg=222 guifg=Black guibg=#FFFF77
 
-    map <A-Down> ]c
-    map <A-UP>   [c
+    nmap <F7> [c " previous diff
+    nmap <F8> ]c " next diff
 else
-    set !cursorline
+    set nocursorline
 endif
+
+"// unite
+nmap uf <Esc>:Unite -start-insert file<CR>
+nmap ur <Esc>:Unite file_rec<CR>
+let g:unite_source_file_rec_max_depth =5
+
+" buffergator
+let g:buffergator_viewport_split_policy="T"
+
+
+"----------- EasyGrep -----------
+let g:EasyGrepCommand = 1
+let g:EasyGrepMode = 3
+let g:EasyGrepRecursive  = 1
+let g:EasyGrepRoot = "cwd"
+" let g:EasyGrepRoot = "search:.git,.svn
+let g:EasyGrepIgnoreCase = 0
+" let g:EasyGrepFilesToExclude = "tags, *.bak, *~, cscope.*, *.a, *.o, *.pyc, *.bak, *.swp"
+let g:EasyGrepOpenWindowOnMatch = 1
+let g:EasyGrepDefaultUserPattern = "*.c *.h *.cpp *.hpp *.cxx *.hxx *.cc *.hh *.c++ *.patch .m4 *.ac *[mM]akefile *.mk *.mak *.sh *.bash *.cmd *.bat"
+
+" ----------- CtrlP ---------------------
+" let g:ctrlp_map = '<A-w>'
+let g:ctrlp_clear_cache_on_exit=0
+let g:ctrlp_max_files=0
+let g:ctrlp_max_depth=40
+"let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir': '\v[\/](\.git|\.hg|\.svn|IAR|Debug|Release)$',
+  \ 'file': '\v\.(exe|so|dll|o|a|out|obj|bin|cmd)$',
+  \ }
+
+let g:ctrlp_user_command = 'find %s -type f -name "*.h" -o -name "*.hh" -o -name "*.c" -o -name "*.cpp"'       " MacOSX/Linux
+
+" ----------------- ctag/cscope  -------------------
+if has("cscope")
+    set csto=0 "// 0 = first cscope and then ctag
+    set cst    "// use cscope and ctag
+    set cspc=3 "// show last 3 part of path
+
+    "// add any database
+    let search_layer=4
+    let curdir = getcwd()
+
+    let i = 1
+    while i < search_layer
+        if filereadable("cscope.out")
+            cs add cscope.out
+            " let i = search_layer "// for only add one cscope database
+        endif
+        cd ..
+        let i += 1
+    endwhile
+
+    "// search tags
+    set tags=./tags;/
+    set autochdir
+    " set noautochdir
+
+    " execute "cd " . curdir
+endif
+
 
 
