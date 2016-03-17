@@ -5,12 +5,15 @@ set fileencoding=utf-8
 set termencoding=utf-8
 
 syntax on
+filetype plugin on
 
 " colorscheme koehler
 colorscheme xoria256
 " colorscheme darkblue
 set number
 set expandtab
+autocmd FileType make setlocal noexpandtab
+
 set tabstop=4
 set shiftwidth=4
 set smartindent
