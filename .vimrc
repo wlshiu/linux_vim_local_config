@@ -33,7 +33,7 @@ set hlsearch
 " show tab
 set list listchars=tab:>.
 " show ^M
-:e ++ff=unix %
+set ffs=unix
 
 set statusline=%F%m%r%h%w\ [%{&ff}]%y[%p%%][%04l/%L,%04v]
 "              | | | | |    |      |  |     |    |  |
