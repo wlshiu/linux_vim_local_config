@@ -1,3 +1,40 @@
+"========================================================
+" Firet
+" $ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/
+"========================================================
+
+
+
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+Plugin 'kien/ctrlp.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'majutsushi/tagbar'
+Plugin 'Tuxdude/mark.vim'
+Plugin 'jeetsukumaran/vim-buffergator'
+Plugin 'Yggdroot/indentLine'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+
+
+"============================================
 set t_Co=256
 set encoding=utf-8
 set fileencodings=utf-8,cp950
@@ -27,7 +64,7 @@ set foldcolumn=3
 set fileformat=unix
 set autoread
 set ignorecase
-set autochdir
+"set autochdir
 set hlsearch
 
 " show tab
@@ -77,6 +114,24 @@ map <C-l> <C-W>l
 "// jump to line start/end
 nmap ms <Home>
 nmap mt <End>
+"// Delete trailing white space
+nmap \de <Esc>:%s/\s\+$//g <CR>
+"
+"// Remove the Windows ^M - when the encodings gets messed up
+nmap \dm <Esc>:%s/\r//g <CR>
+
+if filereadable("cscope.out")
+    execute "cs add cscope.out"
+endif
+
+
+" ----- set python fold ----------------
+autocmd FileType python setlocal foldmethod=indent
+set foldlevel=5
+nnoremap <space> za
+vnoremap <space> zc
+
+let python_highlight_all=1
 
 " ----------- tagbar ---------------------
 let g:tagbar_left = 1
@@ -100,45 +155,6 @@ let NERDTreeIgnore += ['\.o$','\.a$']
 nmap nt :NERDTreeToggle<CR>
 " nmap <A-n> :NERDTreeToggle<CR>
 
-
-" ----------- vimdiff ---------------------
-if &diff
-    set cursorline
-    set wrap
-    hi CursorLine   ctermfg=Black ctermbg=206 guifg=Black guibg=206
-    " hi diffLine     ctermfg=Black ctermbg=93 guifg=Black guibg=206
-
-    " hi DiffAdd ctermfg=White ctermbg=21 guifg=White  guibg=21
-    " hi diffRemoved ctermfg=Grey ctermbg=Grey guifg=Grey
-    " hi DiffChange ctermfg=Black ctermbg=178 guifg=Black guibg=#FFCC22
-    " hi DiffText ctermfg=Black ctermbg=222 guifg=Black guibg=#FFFF77
-
-    nmap <F7> [c " previous diff
-    nmap <F8> ]c " next diff
-else
-    set nocursorline
-endif
-
-"// unite
-nmap uf <Esc>:Unite -start-insert file<CR>
-nmap ur <Esc>:Unite file_rec<CR>
-let g:unite_source_file_rec_max_depth =5
-
-" buffergator
-let g:buffergator_viewport_split_policy="T"
-
-
-"----------- EasyGrep -----------
-let g:EasyGrepCommand = 1
-let g:EasyGrepMode = 3
-let g:EasyGrepRecursive  = 1
-let g:EasyGrepRoot = "cwd"
-" let g:EasyGrepRoot = "search:.git,.svn
-let g:EasyGrepIgnoreCase = 0
-" let g:EasyGrepFilesToExclude = "tags, *.bak, *~, cscope.*, *.a, *.o, *.pyc, *.bak, *.swp"
-let g:EasyGrepOpenWindowOnMatch = 1
-let g:EasyGrepDefaultUserPattern = "*.c *.h *.cpp *.hpp *.cxx *.hxx *.cc *.hh *.c++ *.patch .m4 *.ac *[mM]akefile *.mk *.mak *.sh *.bash *.cmd *.bat"
-
 " ----------- CtrlP ---------------------
 " let g:ctrlp_map = '<A-w>'
 let g:ctrlp_clear_cache_on_exit=0
@@ -150,35 +166,13 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(exe|so|dll|o|a|out|obj|bin|cmd)$',
   \ }
 
+let g:ctrlp_match_window = 'results:200'
 let g:ctrlp_user_command = 'find %s -type f -name "*.h" -o -name "*.hh" -o -name "*.c" -o -name "*.cpp"'       " MacOSX/Linux
 
-" ----------------- ctag/cscope  -------------------
-if has("cscope")
-    set csto=0 "// 0 = first cscope and then ctag
-    set cst    "// use cscope and ctag
-    set cspc=3 "// show last 3 part of path
+" --------- indetLine ------------
+let g:indentLine_color_term = 239
+let g:indentLine_char = '¦'
 
-    "// add any database
-    let search_layer=4
-    let curdir = getcwd()
-
-    let i = 1
-    while i < search_layer
-        if filereadable("cscope.out")
-            cs add cscope.out
-            " let i = search_layer "// for only add one cscope database
-        endif
-        cd ..
-        let i += 1
-    endwhile
-
-    "// search tags
-    set tags=./tags;/
-    set autochdir
-    " set noautochdir
-
-    " execute "cd " . curdir
-endif
-
-
+" ----------- buffergator ----------
+let g:buffergator_viewport_split_policy="T"
 
