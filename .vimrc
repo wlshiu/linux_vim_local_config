@@ -66,6 +66,7 @@ set autoread
 set ignorecase
 "set autochdir
 set hlsearch
+set cursorline
 
 " show tab
 set list listchars=tab:>.
@@ -169,10 +170,21 @@ let g:ctrlp_custom_ignore = {
 let g:ctrlp_match_window = 'results:200'
 let g:ctrlp_user_command = 'find %s -type f -name "*.h" -o -name "*.hh" -o -name "*.c" -o -name "*.cpp"'       " MacOSX/Linux
 
+let g:ctrlp_buffer_func = { 'enter': 'BrightHighlightOn', 'exit':  'BrightHighlightOff', }
+
+function BrightHighlightOn()
+    hi CursorLine ctermbg=239
+endfunction
+
+function BrightHighlightOff()
+    hi CursorLine ctermbg=none
+endfunction
+
 " --------- indetLine ------------
 let g:indentLine_color_term = 239
 let g:indentLine_char = '¦'
 
 " ----------- buffergator ----------
 let g:buffergator_viewport_split_policy="T"
+
 
