@@ -346,6 +346,13 @@ Source Explorer     自動顯示定義
 :MarkClear      clear all mark
 
 
+-------------- *vbookmark*
+mm  用於設定或者刪除一個書籤，或者使用命令 VbookmarkToggle
+mn  用於跳轉到下一個書籤，或者使用命令 VbookmarkNext
+mp  用於跳轉到前一個書籤，或者使用命令 VbookmarkPrevious
+ma  用於刪除所有書籤，或者使用命令 VbookmarkClearAll
+
+
 -------------- *DrawIt*
    \di to start DrawIt and
    \ds to stop  DrawIt.

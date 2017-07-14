@@ -5,32 +5,32 @@
 
 
 
-set nocompatible              " be iMproved, required
-filetype off                  " required
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-Plugin 'kien/ctrlp.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'majutsushi/tagbar'
-Plugin 'Tuxdude/mark.vim'
-Plugin 'jeetsukumaran/vim-buffergator'
-Plugin 'Yggdroot/indentLine'
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+" set nocompatible              " be iMproved, required
+" filetype off                  " required
+" 
+" " set the runtime path to include Vundle and initialize
+" set rtp+=~/.vim/bundle/
+" call vundle#begin()
+" " alternatively, pass a path where Vundle should install plugins
+" "call vundle#begin('~/some/path/here')
+" 
+" " let Vundle manage Vundle, required
+" Plugin 'VundleVim/Vundle.vim'
+" 
+" " The following are examples of different formats supported.
+" " Keep Plugin commands between vundle#begin/end.
+" " plugin on GitHub repo
+" Plugin 'kien/ctrlp.vim'
+" Plugin 'scrooloose/nerdtree'
+" Plugin 'scrooloose/nerdcommenter'
+" Plugin 'majutsushi/tagbar'
+" Plugin 'Tuxdude/mark.vim'
+" Plugin 'jeetsukumaran/vim-buffergator'
+" Plugin 'Yggdroot/indentLine'
+" 
+" " All of your Plugins must be added before the following line
+" call vundle#end()            " required
+" filetype plugin indent on    " required
 
 
 
@@ -187,4 +187,70 @@ let g:indentLine_char = '¦'
 " ----------- buffergator ----------
 let g:buffergator_viewport_split_policy="T"
 
+"============================================
+    "-----------------
+    " Cscope/Ctags: {{{1
+        let cscope='$VIMRUNTIME\cscope.exe'
+        function Do_CsTag()
+            let cur_dir = getcwd()
 
+            if has("cscope")
+                silent! execute "cs kill -1"
+            endif
+
+            if filereadable("cscope.out")
+                if (has('win32') || has('win64'))
+                    let csoutdeleted=delete(cur_dir."\\"."cscope.out")
+                else
+                    let csoutdeleted=delete("./"."cscope.out")
+                endif
+
+                if (csoutdeleted!=0)
+                    echohl WarningMsg | echo "Fail to do cscope! I cannot delete the cscope.out" | echohl None
+                    return
+                endif
+            endif
+
+            " if filereadable("cscope.files")
+            "     if (has('win32') || has('win64'))
+            "         let csfilesdeleted=delete(cur_dir."\\"."cscope.files")
+            "     else
+            "         let csfilesdeleted=delete("./"."cscope.files")
+            "     endif
+            "     if(csfilesdeleted!=0)
+            "         echohl WarningMsg | echo "Fail to do cscope! I cannot delete the cscope.files" | echohl None
+            "         return
+            "     endif
+            " endif
+
+            if !filereadable("cscope.files")
+                "if (has('win32') || has('win64'))
+                "    silent! execute "!dir /s/b *.c,*.cpp,*.h,*.hh,*.py > cscope.files"
+                "else
+                    silent! execute "!find . -name '*.h' -o -name '*.hh' -o -name '*.c' -o -name '*.cpp' -o -name '*.java' -o -name '*.py' > cscope.files"
+                "endif
+            endif
+
+            if (executable('ctags'))
+                " silent! execute "!ctags -R --c-types=+p --fields=+S *"
+                " silent! execute "!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."
+                silent! execute "!ctags --c++-kinds=+p --fields=+iaS --extra=+q --sort=yes -L cscope.files"
+            endif
+
+            if (executable('cscope') && has("cscope") )
+                silent! execute "!cscope -bkq -i cscope.files"
+                execute "normal :"
+                if filereadable("cscope.out")
+                    execute "cs add cscope.out"
+                endif
+            endif
+
+            "CCTreeLoadDB
+        endfunction
+
+        " do ctag and cscope, finally load cscope.out to CCTree
+        map <A-g> <Esc>:call Do_CsTag() <CR>
+        nmap tg <Esc>:call Do_CsTag() <CR>
+
+
+    " }}}1
