@@ -29,6 +29,8 @@ SHELL CMD                                   *shell-cmd*
 
 :cw             秀出 quickFixf視窗
 
+:g/pattern/#    list search result
+
 :sus            suspend vim and give you a console. >
     ctrl + z
 <
@@ -53,6 +55,11 @@ when press \ + Enter, the cursor break context to next line. >
 
 when press \ + Space, insert white spec at cursor. >
     nmap \<SPACE>  i<SPACE><ESC>
+<
+
+Close quickFix window when press 'enter' >
+ In .vimrc
+    autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
 <
 
 diff a.file b.file >
@@ -192,6 +199,21 @@ step 1. 建立搜尋file list (generate cscope.files)
 setp 2. 開始建立索引 cscope.out
     :cscope -bkq -i cscope.files
 
+-------------- *gj + idutils*
+install idutils
+$ sudo apt-get install id-utils  # Debian / Ubuntu
+
+$ gj -i         # generate ID database 
+
+\g : Find all occurence of the symbol under the cursor.
+\G : Find all possible declarations or definitions.
+\d : Find all possible definitions based on the debug info in ELF binaries. (much less results)
+
+In quickFix window
+q : close quickFix window
+s : open file horizonally 
+v : open file vertically 
+
 -------------- *EasyGrep*
 將在文件中搜索當前光標下的單詞 >
     \vv
@@ -216,6 +238,7 @@ Grep也可以帶參數, 比如:Grep -ir word, r表示遞歸目錄. i表示不區
 打開選項菜單 >
     \vo or :GrepOptions
 <
+
 -------------- *A.vim*
 開啟對應的 header file
 :A      切換到 h file
@@ -269,7 +292,14 @@ In "normal mode"
 \bs : horizontal split screen buffer browser
 q   : exit
 
+-------------- *airline*
+tabline
+:bn     跳下一個buffer
+:bp     往上一個buffer
+:b n    跳往第n個buffer
+:bd     關掉目前buffer
 
+    
 -------------- *MiniBufExplorer*
 :bn   打開當前buffer的下一個buffer
 :bp   打開當前buffer的前一個buffer

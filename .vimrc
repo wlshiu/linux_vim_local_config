@@ -40,6 +40,7 @@ set encoding=utf-8
 set fileencodings=utf-8,cp950
 set fileencoding=utf-8
 set termencoding=utf-8
+" set lines=36 columns=140
 
 syntax on
 filetype plugin on
@@ -67,6 +68,7 @@ set ignorecase
 "set autochdir
 set hlsearch
 set cursorline
+set winaltkeys=no
 
 " show tab
 set list listchars=tab:>.
