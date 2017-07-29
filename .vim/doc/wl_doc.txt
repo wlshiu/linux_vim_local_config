@@ -211,8 +211,10 @@ $ gj -i         # generate ID database
 
 In quickFix window
 q : close quickFix window
-s : open file horizonally 
-v : open file vertically 
+s : open file horizonally and switch window
+v : open file vertically and switch window
+gv: open file vertically
+go: open file
 
 -------------- *EasyGrep*
 將在文件中搜索當前光標下的單詞 >
