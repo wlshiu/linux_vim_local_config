@@ -122,6 +122,8 @@ function! s:SearchFile(cmd, args) "{{{
             return
         endif
 
+        let options = ''
+        let i = 0
         for suf in suffixes
             let target = matchstr(cur_file, '/\w\+\.\a\+$')  " check at sub-directory or not
             if empty(target)
@@ -133,9 +135,17 @@ function! s:SearchFile(cmd, args) "{{{
 
             let target = substitute(target, pattern, suf, '')
 
-            " silent exe '!find ' getcwd() '-name "'.target.'" | sed "s/:/:1:/" >> '.error_file
-            silent exe '!find ' getcwd() '-name "'.target.'" >> '.error_file
+            if i == 0
+                let options = options.'-name "'.target.'" '
+            else
+                let options = options.'-o -name "'.target.'" '
+            endif
+
+            let i += 1
         endfor
+
+        " silent exe '!find ' getcwd() '-name "'.target.'" | sed "s/:/:1:/" >> '.error_file
+        silent exe '!find ' getcwd() '-type f '.options.' >> '.error_file
     else
         let header_name = matchstr(header_path, '/\w\+\.\a\+$')
         if empty(header_name)
