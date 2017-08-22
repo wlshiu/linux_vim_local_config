@@ -70,13 +70,48 @@ endfunction
 " imap <silent> <C-U><C-U> {<C-R>=system('uuidgen')<CR><C-U><BS>}
 
 
-function! FindFiles(filename) "{{{
+function! s:FindFiles(filename) "{{{
+
+    if a:filename ==# ''
+        echo "Wrong arguments"
+        return
+    endif
+
+    let s:argv = split(a:filename, ' ')
+    let s:argc = len(s:argv)
+
+    if s:argc < 2
+        let target_dir = getcwd()
+    else
+        let target_dir = s:argc[s:argc - 1]
+    endif
+
+    let options = ''
+    let i = 0
+    while 1
+        if i == 0
+            let options = options.'-iname "'.s:argv[i].'*" '
+        else
+            let options = options.'-o -iname "'.s:argv[i].'*" '
+        endif
+
+        let i += 1
+
+        if i >= s:argc - 1
+            break
+        endif
+    endwhile
+
+    " echo options
+    " echo '!find ' .target_dir. ' -type f ' .options.' | xargs file | sed "s/:/:1:/" > '
+
     redraw
 
     let error_file = tempname()
     " let error_file = expand('./tmp.txt')  " output to a file
 
-    silent exe '!find ' getcwd() '-name "'.a:filename.'" | xargs file | sed "s/:/:1:/" > '.error_file
+    silent exe '!find ' .target_dir. ' -type f ' .options.' | xargs file | sed "s/:/:1:/" > '.error_file
+    " silent exe '!find ' getcwd() '-name "'.a:filename.'" | xargs file | sed "s/:/:1:/" > '.error_file
 
     " silent exe '!find ' getcwd() '-name "'.a:filename.'" > '.error_file
     set errorformat=%f:%l%m
@@ -98,6 +133,8 @@ function! FindFiles(filename) "{{{
     exec "nnoremap <silent> <buffer> gv <C-W><CR><C-W>H<C-W>b<C-W>J"
 
 endfunction "}}}
+command! -bang -nargs=* -range FindFiles call s:FindFiles('<args>')
+nnoremap <silent> <Leader>ff :FindFiles! <C-R>=expand("<cword>")<CR> <CR>
 
 function! s:SearchFile(cmd, args) "{{{
     let line_ctxt = getline('.')
@@ -136,9 +173,9 @@ function! s:SearchFile(cmd, args) "{{{
             let target = substitute(target, pattern, suf, '')
 
             if i == 0
-                let options = options.'-name "'.target.'" '
+                let options = options.'-iname "'.target.'" '
             else
-                let options = options.'-o -name "'.target.'" '
+                let options = options.'-o -iname "'.target.'" '
             endif
 
             let i += 1
@@ -154,7 +191,7 @@ function! s:SearchFile(cmd, args) "{{{
             let target = substitute(header_name, '/', '', '')
         endif
 
-        silent exe '!find ' getcwd() '-name "'.target.'" >> '.error_file
+        silent exe '!find ' getcwd() '-type f -iname "'.target.'" >> '.error_file
     endif
 
     redraw
