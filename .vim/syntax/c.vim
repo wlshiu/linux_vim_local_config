@@ -335,7 +335,8 @@ if !exists("c_no_ansi") || exists("c_ansi_constants") || exists("c_gnu")
   syn keyword cConstant M_1_PI M_2_PI M_2_SQRTPI M_SQRT2 M_SQRT1_2
 endif
 if !exists("c_no_c99") " ISO C99
-  syn keyword cConstant true false
+  syn keyword cBoolean true false
+  hi def link cBoolean		Boolean
 endif
 
 " Accept %: for # (C99)

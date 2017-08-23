@@ -88,6 +88,7 @@ hi Special      ctermfg=174 guifg=#df8787
 hi Statement    ctermfg=12 guifg=#87afdf                           cterm=none gui=none
 hi Type         ctermfg=179 guifg=#afafdf                           cterm=none gui=none
 hi Operator     ctermfg=227 guifg=#f4e360        cterm=none gui=none
+hi Boolean      ctermfg=13 guifg=#ff00ff
 
 "" Special {{{2
 """ .diff {{{3

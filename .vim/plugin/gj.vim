@@ -57,4 +57,4 @@ nnoremap <silent> <Leader>g :Gj! <C-R>=expand("<cword>")<CR> <CR>
 nnoremap <silent> <Leader>G :Gj! -d <C-R>=expand("<cword>")<CR> <CR>
 " Find all possible definitions based on the debug info in ELF binaries.
 " (much less results)
-nnoremap <silent> <Leader>d :Gj! -D <C-R>=expand("<cword>")<CR> <CR>
+nnoremap <silent> <Leader>D :Gj! -D <C-R>=expand("<cword>")<CR> <CR>
