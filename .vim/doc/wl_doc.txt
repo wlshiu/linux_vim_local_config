@@ -377,6 +377,32 @@ Source Explorer     自動顯示定義
 \m              highlight selected word
 :MarkClear      clear all mark
 
+-------------- *ack.vim*
+需要先安裝 ack pack (perl)
+    https://beyondgrep.com/documentation/
+
+ack (perl) >
+    # full search in a directory and print context
+    $ ack [options] PATTERN [directory path]
+
+    # default directory './'
+    $ ack PATTERN
+
+    # search and only list files
+    $ ack -l PATTERN [directory path]
+
+    # open all files with vim
+    $ vim -o `ack -l PATTERN [directory path]`
+
+    # filter searching
+    $ ack -l mkv ./libavformat/*.[hd]
+<
+
+ack.vim >
+    : Ack [options] PATTERN [directory path]
+<
+
+
 
 -------------- *vbookmark*
 mm  用於設定或者刪除一個書籤，或者使用命令 VbookmarkToggle
