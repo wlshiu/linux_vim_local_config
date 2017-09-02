@@ -7,16 +7,16 @@
 
 " set nocompatible              " be iMproved, required
 " filetype off                  " required
-" 
+"
 " " set the runtime path to include Vundle and initialize
 " set rtp+=~/.vim/bundle/
 " call vundle#begin()
 " " alternatively, pass a path where Vundle should install plugins
 " "call vundle#begin('~/some/path/here')
-" 
+"
 " " let Vundle manage Vundle, required
 " Plugin 'VundleVim/Vundle.vim'
-" 
+"
 " " The following are examples of different formats supported.
 " " Keep Plugin commands between vundle#begin/end.
 " " plugin on GitHub repo
@@ -27,12 +27,10 @@
 " Plugin 'Tuxdude/mark.vim'
 " Plugin 'jeetsukumaran/vim-buffergator'
 " Plugin 'Yggdroot/indentLine'
-" 
+"
 " " All of your Plugins must be added before the following line
 " call vundle#end()            " required
 " filetype plugin indent on    " required
-
-
 
 "============================================
 set t_Co=256
@@ -96,10 +94,10 @@ if version >= 700
     au InsertLeave * hi StatusLine ctermbg=251 guibg=#EEEEEE ctermfg=233 guifg=#363636 gui=none
 endif
 
-let &t_ti.="\e[1 q"
-let &t_SI.="\e[5 q"
-let &t_EI.="\e[1 q"
-let &t_te.="\e[0 q"
+"let &t_ti.="\e[1 q"
+"let &t_SI.="\e[5 q"
+"let &t_EI.="\e[1 q"
+"let &t_te.="\e[0 q"
 
 "// set height light word
 " nmap <leader>m: syn match TempKeyword /\<<C-R>=expand("<cword>")<CR>\>/<CR>
@@ -188,6 +186,12 @@ let g:indentLine_char = '¦'
 
 " ----------- buffergator ----------
 let g:buffergator_viewport_split_policy="T"
+
+" ----------- bash-support ----------
+let g:BASH_MapLeader = ','
+
+" ----------- ack ----------
+let g:ackhighlight = 1
 
 "============================================
     "-----------------
