@@ -203,7 +203,7 @@ setp 2. 開始建立索引 cscope.out
 install idutils
 $ sudo apt-get install id-utils  # Debian / Ubuntu
 
-$ gj -i         # generate ID database 
+$ gj -i         # generate ID database
 
 \g : Find all occurence of the symbol under the cursor.
 \G : Find all possible declarations or definitions.
@@ -301,7 +301,7 @@ tabline
 :b n    跳往第n個buffer
 :bd     關掉目前buffer
 
-    
+
 -------------- *MiniBufExplorer*
 :bn   打開當前buffer的下一個buffer
 :bp   打開當前buffer的前一個buffer
@@ -384,6 +384,22 @@ mn  用於跳轉到下一個書籤，或者使用命令 VbookmarkNext
 mp  用於跳轉到前一個書籤，或者使用命令 VbookmarkPrevious
 ma  用於刪除所有書籤，或者使用命令 VbookmarkClearAll
 
+-------------- *bash-support*
+I set <leader> to ','
+
+<leader>sc      case in … esac
+<leader>sl      elif then
+<leader>sf      for in do done
+<leader>sfo     for ((…)) do done
+<leader>si      if then fi
+<leader>sie     if then else fi
+<leader>ss      select in do done
+<leader>st      until do done
+<leader>sw      while do done
+<leader>sfu     function
+<leader>se      echo ­e “\n”
+<leader>sp      printf “\n”
+<leader>hh      syntax help
 
 -------------- *DrawIt*
    \di to start DrawIt and
