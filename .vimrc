@@ -126,6 +126,18 @@ if filereadable("cscope.out")
 endif
 
 
+"// vimdiff move to different
+if &diff
+    set cursorline
+    set wrap
+
+    map <A-Down> ]c
+    map <A-UP>   [c
+else
+    set nocursorline
+endif
+
+
 " ----- set python fold ----------------
 autocmd FileType python setlocal foldmethod=indent
 set foldlevel=5
