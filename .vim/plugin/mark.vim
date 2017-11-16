@@ -72,12 +72,14 @@
 
 " default colors/groups
 " you may define your own colors in you vimrc file, in the form as below:
-hi MarkWord1  ctermbg=50     ctermfg=Black  guibg=#8CCBEA    guifg=Black
-hi MarkWord2  ctermbg=112    ctermfg=Black  guibg=#A4E57E    guifg=Black
-hi MarkWord3  ctermbg=184   ctermfg=Black  guibg=#FFDB72    guifg=Black
-hi MarkWord4  ctermbg=1      ctermfg=Black  guibg=#FF7272    guifg=Black
-hi MarkWord5  ctermbg=5  ctermfg=Black  guibg=#FFB3FF    guifg=Black
-hi MarkWord6  ctermbg=123     ctermfg=Black  guibg=#9999FF    guifg=Black
+hi MarkWord1  ctermbg=Cyan     ctermfg=Black  guibg=#8CCBEA    guifg=Black
+" hi MarkWord2  ctermbg=Green    ctermfg=Black  guibg=#A4E57E    guifg=Black
+hi MarkWord2  ctermbg=46    ctermfg=Black  guibg=#A4E57E    guifg=Black
+hi MarkWord3  ctermbg=Yellow   ctermfg=Black  guibg=#FFDB72    guifg=Black
+hi MarkWord4  ctermbg=Red      ctermfg=Black  guibg=#FF7272    guifg=Black
+hi MarkWord5  ctermbg=Magenta  ctermfg=Black  guibg=#FFB3FF    guifg=Black
+hi MarkWord6  ctermbg=93     ctermfg=Black  guibg=#9999FF    guifg=Black
+hi MarkWord7  ctermbg=15     ctermfg=Black  guibg=#9999FF    guifg=Black
 
 " Anti reinclusion guards
 if exists('g:loaded_mark') && !exists('g:force_reload_mark')

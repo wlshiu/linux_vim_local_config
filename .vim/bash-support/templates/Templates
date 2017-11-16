@@ -64,8 +64,9 @@ IncludeFile( 'patternmatching.templates' )
 §  - option 'nomenu': this will not create a menu entry
 § =============================================================
 
+§ set -o nounset                                  # Treat unset variables as an error
 == Skeleton.script-set == nomenu, below ==
-set -o nounset                                  # Treat unset variables as an error
+set -e
 == ENDTEMPLATE ==
 
 § =============================================================

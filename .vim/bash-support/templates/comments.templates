@@ -17,7 +17,7 @@
 #-------------------------------------------------------------------------------
 == Comments.file header == start, map:ch ==
 #===============================================================================
-# COPYRIGHT:|COPYRIGHT|
+# |COPYRIGHT|
 #
 #          FILE: |FILENAME|
 #
@@ -26,9 +26,6 @@
 #   DESCRIPTION: <CURSOR>
 #
 #       OPTIONS: ---
-#  REQUIREMENTS: ---
-#          BUGS: ---
-#         NOTES: ---
 #        AUTHOR: |AUTHOR| (|AUTHORREF|), |EMAIL|
 #       CREATED: |DATE|
 #       LICENSE: |LICENSE|
@@ -72,9 +69,9 @@
 	'AUTHORREF'    : '|AUTHORREF|',
 	'COMPANY'      : '|COMPANY|',
 	'COPYRIGHT'    : '|COPYRIGHT|',
-	'LICENSE'      : '|LICENSE|',
 	'EMAIL'        : '|EMAIL|',
 	'ORGANIZATION' : '|ORGANIZATION|',
+	'LICENSE'      : '|LICENSE|',
 == ENDLIST ==
 
 § -------------------------------------------------------------

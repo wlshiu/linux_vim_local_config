@@ -121,6 +121,8 @@ nmap \de <Esc>:%s/\s\+$//g <CR>
 "// Remove the Windows ^M - when the encodings gets messed up
 nmap \dm <Esc>:%s/\r//g <CR>
 
+nmap \q :ccl<CR>
+
 if filereadable("cscope.out")
     execute "cs add cscope.out"
 endif
@@ -137,6 +139,9 @@ else
     set nocursorline
 endif
 
+" ----- set syntax for unknown file type ----------------
+au BufNewFile,BufRead *.rss set filetype=xml
+au! BufRead,BufNewFile *.md       set filetype=markdown
 
 " ----- set python fold ----------------
 autocmd FileType python setlocal foldmethod=indent
@@ -202,19 +207,29 @@ let g:buffergator_viewport_split_policy="T"
 " ----------- bash-support ----------
 let g:BASH_MapLeader = ','
 
-" ----------- ack ----------
+" ----------- Ack ----------
 let g:ackhighlight = 1
+
+"----------- gtags --------------
+set cscopetag
+set cscopeprg=gtags-cscope
+let GtagsCscope_Auto_Load = 1
+let GtagsCscope_Quiet = 1
+let Gtags_No_Auto_Jump = 1
+
+nmap <C-\>] :Gtags -r <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>' :Gtags -s <C-R>=expand("<cword>")<CR><CR>
 
 "============================================
     "-----------------
     " Cscope/Ctags: {{{1
-        let cscope='$VIMRUNTIME\cscope.exe'
+        "let cscope='$VIMRUNTIME\cscope.exe'
         function Do_CsTag()
             let cur_dir = getcwd()
 
-            if has("cscope")
-                silent! execute "cs kill -1"
-            endif
+            "if has("cscope")
+            "    silent! execute "cs kill -1"
+            "endif
 
             if filereadable("cscope.out")
                 if (has('win32') || has('win64'))
@@ -241,13 +256,13 @@ let g:ackhighlight = 1
             "     endif
             " endif
 
-            if !filereadable("cscope.files")
-                "if (has('win32') || has('win64'))
-                "    silent! execute "!dir /s/b *.c,*.cpp,*.h,*.hh,*.py > cscope.files"
-                "else
-                    silent! execute "!find . -name '*.h' -o -name '*.hh' -o -name '*.c' -o -name '*.cpp' -o -name '*.java' -o -name '*.py' > cscope.files"
-                "endif
-            endif
+            " if !filereadable("cscope.files")
+            "     "if (has('win32') || has('win64'))
+            "     "    silent! execute "!dir /s/b *.c,*.cpp,*.h,*.hh,*.py > cscope.files"
+            "     "else
+            "         silent! execute "!find . -type f -name '*.h' -o -name '*.hh' -o -name '*.c' -o -name '*.cpp' -o -name '*.java' -o -name '*.py' > cscope.files"
+            "     "endif
+            " endif
 
             if (executable('ctags'))
                 " silent! execute "!ctags -R --c-types=+p --fields=+S *"
@@ -255,13 +270,24 @@ let g:ackhighlight = 1
                 silent! execute "!ctags --c++-kinds=+p --fields=+iaS --extra=+q --sort=yes -L cscope.files"
             endif
 
-            if (executable('cscope') && has("cscope") )
-                silent! execute "!cscope -bkq -i cscope.files"
+            if (executable('gtags'))
+                "if !filereadable("GTAGS")
+                    "silent! execute "global -u"
+                    silent! execute "!gtags -f ./cscope.files"
+                "endif
                 execute "normal :"
-                if filereadable("cscope.out")
-                    execute "cs add cscope.out"
+                if filereadable("GTAGS")
+                    execute "cs add GTAGS"
                 endif
             endif
+
+            "if (executable('cscope') && has("cscope") )
+            "    silent! execute "!cscope -bkq -i cscope.files"
+            "    execute "normal :"
+            "    if filereadable("cscope.out")
+            "        execute "cs add cscope.out"
+            "    endif
+            "endif
 
             "CCTreeLoadDB
         endfunction
@@ -272,3 +298,4 @@ let g:ackhighlight = 1
 
 
     " }}}1
+
