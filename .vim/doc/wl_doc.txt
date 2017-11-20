@@ -199,6 +199,32 @@ step 1. 建立搜尋file list (generate cscope.files)
 setp 2. 開始建立索引 cscope.out
     :cscope -bkq -i cscope.files
 
+-------------- *gtags, gnu-global*
+:cs add GTAGS
+
+my hot key >
+    <C-\>] = :Gtags -r <C-R>=expand("<cword>")<CR><CR>
+    <C-\>' :Gtags -s <C-R>=expand("<cword>")<CR><CR>
+<
+
+tab key 可以自動補全函數 >
+    :Gtags func_name     " 打開函數瀏覽
+    :Gtags -r func_name  " search reference func_name
+    :Gtags -s func_name  " search symbol definition
+<
+
+search word of cursor >
+    :GtagsCursor
+<
+
+At project root directory >
+    $ gtags -f cscope.files
+<
+
+reflash database >
+    $ global -u
+<
+
 -------------- *gj + idutils*
 install idutils
 $ sudo apt-get install id-utils  # Debian / Ubuntu
