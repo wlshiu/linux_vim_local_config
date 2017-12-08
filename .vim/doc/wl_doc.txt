@@ -269,6 +269,13 @@ Grep也可以帶參數, 比如:Grep -ir word, r表示遞歸目錄. i表示不區
     \vo or :GrepOptions
 <
 
+-------------- *tagbar.vim*
+let g:tagbar_iconchars = ['>', 'v']
+
++ 表示該類是 public 
+- 表示一個 private
+# 則是表示一個 protected
+
 -------------- *A.vim*
 開啟對應的 header file
 :A      切換到 h file
