@@ -207,8 +207,20 @@ let g:buffergator_viewport_split_policy="T"
 " ----------- bash-support ----------
 let g:BASH_MapLeader = ','
 
+" ----------- vimgrep ----------
+" When you press <Leader>gv you vimgrep after the selected text
+nnoremap <silent> <Leader>gv :vimgrep! /<C-R>=expand("<cword>")<CR>/j **/*.[ch]<CR>
+
+" Open vimgrep and put the cursor in the right position
+map <Leader>vg :vimgrep /<C-R>=expand("<cword>")<CR>/j **/*.
+
+" type your pattern
+" map <leader>g :vimgrep //j **/*.<left><left><left><left><left><left><left><left>
+
 " ----------- Ack ----------
 let g:ackhighlight = 1
+let g:ackprg = 'ag --nogroup --column --nocolor'
+map <Leader>ag :Ack <C-R>=expand("<cword>")<CR><CR>
 
 "----------- gtags --------------
 set cscopetag
@@ -227,67 +239,43 @@ nmap <C-\>' :Gtags -s <C-R>=expand("<cword>")<CR><CR>
         function Do_CsTag()
             let cur_dir = getcwd()
 
-            "if has("cscope")
-            "    silent! execute "cs kill -1"
-            "endif
-
-            if filereadable("cscope.out")
-                if (has('win32') || has('win64'))
-                    let csoutdeleted=delete(cur_dir."\\"."cscope.out")
-                else
-                    let csoutdeleted=delete("./"."cscope.out")
-                endif
-
-                if (csoutdeleted!=0)
-                    echohl WarningMsg | echo "Fail to do cscope! I cannot delete the cscope.out" | echohl None
-                    return
-                endif
+            if has("cscope")
+                silent! execute "cs kill -1"
             endif
 
-            " if filereadable("cscope.files")
+            " if filereadable("cscope.out")
             "     if (has('win32') || has('win64'))
-            "         let csfilesdeleted=delete(cur_dir."\\"."cscope.files")
+            "         let csoutdeleted=delete(cur_dir."\\"."cscope.out")
             "     else
-            "         let csfilesdeleted=delete("./"."cscope.files")
+            "         let csoutdeleted=delete("./"."cscope.out")
             "     endif
-            "     if(csfilesdeleted!=0)
-            "         echohl WarningMsg | echo "Fail to do cscope! I cannot delete the cscope.files" | echohl None
+            "
+            "     if (csoutdeleted!=0)
+            "         echohl WarningMsg | echo "Fail to do cscope! I cannot delete the cscope.out" | echohl None
             "         return
             "     endif
             " endif
 
-            " if !filereadable("cscope.files")
-            "     "if (has('win32') || has('win64'))
-            "     "    silent! execute "!dir /s/b *.c,*.cpp,*.h,*.hh,*.py > cscope.files"
-            "     "else
-            "         silent! execute "!find . -type f -name '*.h' -o -name '*.hh' -o -name '*.c' -o -name '*.cpp' -o -name '*.java' -o -name '*.py' > cscope.files"
-            "     "endif
-            " endif
 
-            if (executable('ctags'))
-                " silent! execute "!ctags -R --c-types=+p --fields=+S *"
-                " silent! execute "!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ."
-                silent! execute "!ctags --c++-kinds=+p --fields=+iaS --extra=+q --sort=yes -L cscope.files"
-            endif
-
-            if (executable('gtags'))
-                "if !filereadable("GTAGS")
-                    "silent! execute "global -u"
-                    silent! execute "!gtags -f ./cscope.files"
-                "endif
-                execute "normal :"
-                if filereadable("GTAGS")
-                    execute "cs add GTAGS"
+            if !filereadable("cscope.files")
+                if (has('win32') || has('win64'))
+                    silent! execute "!dir /s/b *.c,*.cpp,*.h,*.hh,*.s,*.py > cscope.files"
+                else
+                    silent! execute "!find . -name '*.h' -o -name '*.hh' -o -name '*.c' -o -name '*.cpp' -o -iname '*.s' -o -name '*.java' -o -name '*.py' > cscope.files"
                 endif
             endif
 
-            "if (executable('cscope') && has("cscope") )
-            "    silent! execute "!cscope -bkq -i cscope.files"
-            "    execute "normal :"
-            "    if filereadable("cscope.out")
-            "        execute "cs add cscope.out"
-            "    endif
-            "endif
+            if (executable('ctags'))
+                silent! execute "!ctags --c++-kinds=+p --fields=+iaS --extra=+q --sort=yes -L cscope.files"
+            endif
+
+            if (executable('cscope') && has("cscope") )
+                silent! execute "!cscope -bkq -i cscope.files"
+                execute "normal :"
+                if filereadable("cscope.out")
+                    execute "cs add cscope.out"
+                endif
+            endif
 
             "CCTreeLoadDB
         endfunction
@@ -296,6 +284,35 @@ nmap <C-\>' :Gtags -s <C-R>=expand("<cword>")<CR><CR>
         map <A-g> <Esc>:call Do_CsTag() <CR>
         nmap tg <Esc>:call Do_CsTag() <CR>
 
+
+    " }}}1
+
+    "-----------------
+    " gtags: {{{1
+        " let gtags='$VIMRUNTIME\gtags.exe'
+        function Do_GTag()
+            let cur_dir = getcwd()
+
+            if !filereadable("cscope.files")
+                if (has('win32') || has('win64'))
+                    silent! execute "!dir /s/b *.c,*.cpp,*.h,*.hh,*.py > cscope.files"
+                else
+                    silent! execute "!find . -name '*.h' -o -name '*.hh' -o -name '*.c' -o -name '*.cpp' -o -name '*.java' -o -name '*.py' > cscope.files"
+                endif
+            endif
+
+            if (executable('ctags'))
+                silent! execute "!ctags --c++-kinds=+p --fields=+iaS --extra=+q --sort=yes -L cscope.files"
+            endif
+
+            if (executable('gtags'))
+                silent! execute "!gtags -f ./cscope.files"
+                execute "normal :"
+                if filereadable("GTAGS")
+                    execute "cs add GTAGS"
+                endif
+            endif
+        endfunction
 
     " }}}1
 
