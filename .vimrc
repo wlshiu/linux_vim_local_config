@@ -167,7 +167,7 @@ let NERDTreeHighlightCursorline=1
 
 let g:NERDTreeDirArrows=0
 "// only show
-let NERDTreeIgnore = ['\(\.c\|\.h\|\.cpp\|\.hh\)\@<!$[[file]]']
+let NERDTreeIgnore = ['\(\.c\|\.h\|\.cpp\|\.hh\|.mk\|.py\|Makefile\|.s\|.S\|.ld\)\@<!$[[file]]']
 let NERDTreeIgnore += ['\.o$','\.a$']
 
 nmap nt :NERDTreeToggle<CR>
@@ -212,14 +212,14 @@ let g:BASH_MapLeader = ','
 nnoremap <silent> <Leader>gv :vimgrep! /<C-R>=expand("<cword>")<CR>/j **/*.[ch]<CR>
 
 " Open vimgrep and put the cursor in the right position
-map <Leader>vg :vimgrep /<C-R>=expand("<cword>")<CR>/j **/*.
+map <Leader>g :vimgrep /<C-R>=expand("<cword>")<CR>/j **/*.
 
 " type your pattern
 " map <leader>g :vimgrep //j **/*.<left><left><left><left><left><left><left><left>
 
 " ----------- Ack ----------
 let g:ackhighlight = 1
-let g:ackprg = 'ag --nogroup --column --color-match --nocolor --ignore tags'
+let g:ackprg = 'ag --nogroup --column --color-match --color-line-number --nocolor --ignore tags'
 map <Leader>ag :Ack! <C-R>=expand("<cword>")<CR><CR>
 
 "----------- gtags --------------

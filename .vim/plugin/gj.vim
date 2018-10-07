@@ -52,7 +52,7 @@ command! -bang -nargs=* -complete=file Gj call s:Gj('grep<bang>', <q-args>)
 " autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
 
 " Find all occurence of the symbol under the cursor.
-nnoremap <silent> <Leader>g :Gj! <C-R>=expand("<cword>")<CR> <CR>
+nnoremap <silent> <Leader>gj :Gj! <C-R>=expand("<cword>")<CR> <CR>
 " Find all possible declarations or definitions.
 nnoremap <silent> <Leader>G :Gj! -d <C-R>=expand("<cword>")<CR> <CR>
 " Find all possible definitions based on the debug info in ELF binaries.
