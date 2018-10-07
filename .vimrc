@@ -220,7 +220,7 @@ map <Leader>vg :vimgrep /<C-R>=expand("<cword>")<CR>/j **/*.
 " ----------- Ack ----------
 let g:ackhighlight = 1
 let g:ackprg = 'ag --nogroup --column --nocolor'
-map <Leader>ag :Ack <C-R>=expand("<cword>")<CR><CR>
+map <Leader>ag :Ack! <C-R>=expand("<cword>")<CR><CR>
 
 "----------- gtags --------------
 set cscopetag
