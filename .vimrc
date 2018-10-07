@@ -219,7 +219,7 @@ map <Leader>vg :vimgrep /<C-R>=expand("<cword>")<CR>/j **/*.
 
 " ----------- Ack ----------
 let g:ackhighlight = 1
-let g:ackprg = 'ag --nogroup --column --nocolor'
+let g:ackprg = 'ag --nogroup --column --color-match --nocolor --ignore tags'
 map <Leader>ag :Ack! <C-R>=expand("<cword>")<CR><CR>
 
 "----------- gtags --------------
