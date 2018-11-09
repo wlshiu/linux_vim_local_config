@@ -65,13 +65,16 @@ set autoread
 set ignorecase
 "set autochdir
 set hlsearch
-set cursorline
 set winaltkeys=no
+
+" re-set in vim if no cursor line highlight
+set cursorline
 
 " show tab
 set list listchars=tab:>.
 " show ^M
 set ffs=unix
+
 
 set statusline=%F%m%r%h%w\ [%{&ff}]%y[%p%%][%04l/%L,%04v]
 "              | | | | |    |      |  |     |    |  |
@@ -123,9 +126,9 @@ nmap \dm <Esc>:%s/\r//g <CR>
 
 nmap \q :ccl<CR>
 
-if filereadable("cscope.out")
-    execute "cs add cscope.out"
-endif
+" if filereadable("cscope.out")
+    " execute "cs add cscope.out"
+" endif
 
 
 "// vimdiff move to different
@@ -141,7 +144,9 @@ endif
 
 " ----- set syntax for unknown file type ----------------
 au BufNewFile,BufRead *.rss set filetype=xml
-au! BufRead,BufNewFile *.md       set filetype=markdown
+au BufNewFile,BufRead *.md set filetype=markdown
+au BufNewFile,BufRead *.lds set filetype=ld
+au BufRead,BufNewFile *.expand set filetype=rtl
 
 " ----- set python fold ----------------
 autocmd FileType python setlocal foldmethod=indent
@@ -232,13 +237,38 @@ let Gtags_No_Auto_Jump = 1
 nmap <C-\>] :Gtags -r <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>' :Gtags -s <C-R>=expand("<cword>")<CR><CR>
 
-"----------- vim-commenter --------------
-let g:commenter_use_default_mapping = 1
-let g:commenter_n_key = "<Leader>q"
-let g:commenter_i_key = "<Leader>q"
-let g:commenter_v_key = "<Leader>q"
+"----------- NERD_commenter --------------
+map <Leader>q <Leader>c<space>
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
+" Enable NERDCommenterToggle to check all selected lines is commented or not
+let g:NERDToggleCheckAllLines = 1
+
+"----------- conque.vim --------------
+" Terminal
+nnoremap <silent> <C-\>t :ConqueTermSplit bash<CR>
 
 "============================================
+    "-----------------
+    "relative line number {{{1
+        " nnoremap <F2> :set norelativenumber!<CR>:set nonumber!<CR>
+        " :set number
+        " :set relativenumber
+    " }}}1
+
     "-----------------
     " Cscope/Ctags: {{{1
         "let cscope='$VIMRUNTIME\cscope.exe'
@@ -322,3 +352,29 @@ let g:commenter_v_key = "<Leader>q"
 
     " }}}1
 
+    "-----------------
+    " remove trailing white space : {{{1
+    function RemoveTrailingWhitespace()
+        if &ft != "diff"
+            let b:curcol = col(".")
+            let b:curline = line(".")
+            silent! %s/\s\+$//
+            silent! %s/\(\s*\n\)\+\%$//
+            call cursor(b:curline, b:curcol)
+        endif
+    endfunction
+    autocmd BufWritePre * call RemoveTrailingWhitespace()
+    " }}}1
+
+    "-----------------
+    " remove trailing white space : {{{1
+    function! AddTitle()
+        call append(0,"")
+        call append(1,"Copyright (c) 2018 Wei-Lun Hsu. All Rights Reserved.")
+        call append(2,"")
+        call append(3,"@file ".expand("%:t"))
+        call append(4,"@author Wei-Lun Hsu")
+        call append(5,"@date Last Modified ".strftime("%Y-%m-%d %H:%M:%S"))
+        call append(6,"")
+    endfunction
+    " }}}1
