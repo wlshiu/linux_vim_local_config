@@ -232,6 +232,12 @@ let Gtags_No_Auto_Jump = 1
 nmap <C-\>] :Gtags -r <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>' :Gtags -s <C-R>=expand("<cword>")<CR><CR>
 
+"----------- vim-commenter --------------
+let g:commenter_use_default_mapping = 1
+let g:commenter_n_key = "<Leader>q"
+let g:commenter_i_key = "<Leader>q"
+let g:commenter_v_key = "<Leader>q"
+
 "============================================
     "-----------------
     " Cscope/Ctags: {{{1
