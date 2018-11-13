@@ -67,6 +67,9 @@ set ignorecase
 set hlsearch
 set winaltkeys=no
 
+" Break lines at word (requires Wrap lines)
+set linebreak
+
 " re-set in vim if no cursor line highlight
 set cursorline
 
