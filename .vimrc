@@ -35,7 +35,8 @@
 "============================================
 set t_Co=256
 set encoding=utf-8
-set fileencodings=utf-8,cp950
+"set fileencodings=utf-8,cp950
+set fileencodings=utf-8,ucs-bom,gb2312,gbk,gb18030,cp936
 set fileencoding=utf-8
 set termencoding=utf-8
 " set lines=36 columns=140
