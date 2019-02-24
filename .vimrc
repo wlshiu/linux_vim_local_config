@@ -32,6 +32,44 @@
 " call vundle#end()            " required
 " filetype plugin indent on    " required
 
+set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+
+"-------------------- private plugins
+Plugin 'Valloric/YouCompleteMe'
+let g:ycm_use_clangd = "Never"
+
+" add the header searching path
+let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
+
+set completeopt=menu,menuone
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_min_num_identifier_candidate_chars = 2
+let g:ycm_key_invoke_completion = '<c-space>'
+
+" auto trigger completer with 2 letter
+let g:ycm_semantic_triggers =  {
+    \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+    \ 'cs,lua,javascript': ['re!\w{2}'],
+    \ }
+
+" set white-list
+let g:ycm_filetype_whitelist = {
+            \ "c":1,
+            \ "cpp":1,
+            \ "objc":1,
+            \ "sh":1,
+            \ "zsh":1,
+            \ "zimbu":1,
+            \ }
+"-------------------------------
+
+call vundle#end()
+filetype plugin indent on
+
 "============================================
 set t_Co=256
 set encoding=utf-8
@@ -53,8 +91,11 @@ autocmd FileType make setlocal noexpandtab
 
 set tabstop=4
 set shiftwidth=4
-set smartindent
-set autoindent
+
+set cindent
+" set smartindent
+" set autoindent
+
 set laststatus=2
 set showmode
 set scrolloff=3
@@ -65,7 +106,6 @@ set fileformat=unix
 set autoread
 set ignorecase
 "set autochdir
-set hlsearch
 set winaltkeys=no
 
 " Break lines at word (requires Wrap lines)
@@ -73,12 +113,20 @@ set linebreak
 
 " re-set in vim if no cursor line highlight
 set cursorline
+set cursorcolumn
+hi CursorLine cterm=none ctermbg=0 " ctermfg=White
+hi CursorColumn cterm=none ctermbg=0 " ctermfg=White
+
+set backspace=indent,eol
 
 " show tab
 set list listchars=tab:>.
 " show ^M
 set ffs=unix
 
+" incremental search
+set incsearch
+set hlsearch
 
 set statusline=%F%m%r%h%w\ [%{&ff}]%y[%p%%][%04l/%L,%04v]
 "              | | | | |    |      |  |     |    |  |
@@ -374,7 +422,7 @@ nnoremap <silent> <C-\>t :ConqueTermSplit bash<CR>
     " remove trailing white space : {{{1
     function! AddTitle()
         call append(0,"")
-        call append(1,"Copyright (c) 2018 Wei-Lun Hsu. All Rights Reserved.")
+        call append(1,"Copyright (c) 2019 Wei-Lun Hsu. All Rights Reserved.")
         call append(2,"")
         call append(3,"@file ".expand("%:t"))
         call append(4,"@author Wei-Lun Hsu")
