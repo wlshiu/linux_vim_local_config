@@ -47,8 +47,10 @@ let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/.y
 
 set completeopt=menu,menuone
 let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_show_diagnostics_ui = 0
 let g:ycm_min_num_identifier_candidate_chars = 2
 let g:ycm_key_invoke_completion = '<c-space>'
+highlight PMenuSel ctermfg=242 ctermbg=27 guifg=darkgrey guibg=black
 
 " auto trigger completer with 2 letter
 let g:ycm_semantic_triggers =  {
