@@ -13,6 +13,7 @@ PATH=$PATH:$HOME/bin:/usr/local/gcc-arm-none-eabi-4_9-2015q1/bin
 export PATH
 
 LS_COLORS="di=00;94:ex=00;32:ln=00;36:"
+LS_COLORS="*.so=1:33:*.a=1;33:$LS_COLORS"
 # export LS_COLORS
 
 parse_git_branch() {
