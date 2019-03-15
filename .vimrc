@@ -201,6 +201,8 @@ au BufNewFile,BufRead *.rss set filetype=xml
 au BufNewFile,BufRead *.md set filetype=markdown
 au BufNewFile,BufRead *.lds set filetype=ld
 au BufRead,BufNewFile *.expand set filetype=rtl
+au BufRead,BufNewFile *.S set filetype=gas
+au BufRead,BufNewFile *.s set filetype=gas
 
 " ----- set python fold ----------------
 autocmd FileType python setlocal foldmethod=indent
