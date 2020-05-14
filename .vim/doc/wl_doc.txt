@@ -156,6 +156,11 @@ On Windows with Gvim
 ==============================================================================
 PLUG-IN                                      *plug-in*
 
+-------------- *hex view*
+toggle between hex and text >
+    :hexmode
+<
+
 -------------- *ctags/cscope*
 :!ctags -R
  or
@@ -272,7 +277,7 @@ Grep也可以帶參數, 比如:Grep -ir word, r表示遞歸目錄. i表示不區
 -------------- *tagbar.vim*
 let g:tagbar_iconchars = ['>', 'v']
 
-+ 表示該類是 public 
++ 表示該類是 public
 - 表示一個 private
 # 則是表示一個 protected
 

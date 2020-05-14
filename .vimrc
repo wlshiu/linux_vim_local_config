@@ -317,6 +317,10 @@ let g:NERDToggleCheckAllLines = 1
 " Terminal
 nnoremap <silent> <C-\>t :ConqueTermSplit bash<CR>
 
+"----------- Hexmode  --------------
+let g:hexmode_xxd_options = '-g 1'
+let g:hexmode_patterns = '*.bin,*.exe,*.dat,*.o'
+
 "============================================
     "-----------------
     "relative line number {{{1
