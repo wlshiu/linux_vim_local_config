@@ -34,12 +34,12 @@
 
 set nocompatible
 filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
+" set rtp+=~/.vim/bundle/Vundle.vim
+" call vundle#begin()
+" Plugin 'VundleVim/Vundle.vim'
 
 "-------------------- private plugins
-Plugin 'Valloric/YouCompleteMe'
+" Plugin 'Valloric/YouCompleteMe'
 let g:ycm_use_clangd = "Never"
 
 " add the header searching path
@@ -69,7 +69,7 @@ let g:ycm_filetype_whitelist = {
             \ }
 "-------------------------------
 
-call vundle#end()
+" call vundle#end()
 filetype plugin indent on
 
 "============================================
@@ -241,12 +241,12 @@ let g:ctrlp_max_files=0
 let g:ctrlp_max_depth=40
 "let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_custom_ignore = {
-  \ 'dir': '\v[\/](\.git|\.hg|\.svn|IAR|Debug|Release)$',
+  \ 'dir': '\v[\/](\.git|\.hg|\.svn|IAR|Debug|Release|out)$',
   \ 'file': '\v\.(exe|so|dll|o|a|out|obj|bin|cmd)$',
   \ }
 
 let g:ctrlp_match_window = 'results:200'
-let g:ctrlp_user_command = 'find %s -type f -name "*.h" -o -name "*.hh" -o -name "*.c" -o -name "*.cpp"'       " MacOSX/Linux
+let g:ctrlp_user_command = 'find %s -type f -name "*.h" -o -name "*.hh" -o -name "*.c" -o -name "*.cpp" -o -iname "*.S" -o -name "*.ld"'       " MacOSX/Linux
 
 let g:ctrlp_buffer_func = { 'enter': 'BrightHighlightOn', 'exit':  'BrightHighlightOff', }
 
@@ -270,10 +270,10 @@ let g:BASH_MapLeader = ','
 
 " ----------- vimgrep ----------
 " When you press <Leader>gv you vimgrep after the selected text
-nnoremap <silent> <Leader>gv :vimgrep! /<C-R>=expand("<cword>")<CR>/j **/*.[ch]<CR>
+nnoremap <silent> <Leader>gv :vimgrep! /<C-R>=expand("<cword>")<CR>/j **/*.[chS]<CR>
 
 " Open vimgrep and put the cursor in the right position
-map <Leader>g :vimgrep /<C-R>=expand("<cword>")<CR>/j **/*.
+map <Leader>f :vimgrep /<C-R>=expand("<cword>")<CR>/j **/*.
 
 " type your pattern
 " map <leader>g :vimgrep //j **/*.<left><left><left><left><left><left><left><left>
@@ -282,6 +282,10 @@ map <Leader>g :vimgrep /<C-R>=expand("<cword>")<CR>/j **/*.
 let g:ackhighlight = 1
 let g:ackprg = 'ag --nogroup --column --color-match --color-line-number --nocolor --ignore tags'
 map <Leader>ag :Ack! <C-R>=expand("<cword>")<CR><CR>
+
+" ----------- gj ----------
+" It MUST execute 'gj -i' with idutils at target directory
+" <Leader>gj to search
 
 "----------- gtags --------------
 set cscopetag
