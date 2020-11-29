@@ -119,7 +119,8 @@ set cursorcolumn
 hi CursorLine cterm=none ctermbg=0 " ctermfg=White
 hi CursorColumn cterm=none ctermbg=0 " ctermfg=White
 
-set backspace=indent,eol
+" set backspace=indent,eol
+set backspace=2
 
 " show tab
 set list listchars=tab:>.
@@ -246,7 +247,7 @@ let g:ctrlp_custom_ignore = {
   \ }
 
 let g:ctrlp_match_window = 'results:200'
-let g:ctrlp_user_command = 'find %s -type f -name "*.h" -o -name "*.hh" -o -name "*.c" -o -name "*.cpp" -o -iname "*.S" -o -name "*.ld"'       " MacOSX/Linux
+let g:ctrlp_user_command = 'find %s -type f -name "*.h*" -o -name "*.c*" -o -name "*.py" -o -iname "*.S" -o -name "*.ld*" -o -name "*.mk" -o -name "Makefile"'       " MacOSX/Linux
 
 let g:ctrlp_buffer_func = { 'enter': 'BrightHighlightOn', 'exit':  'BrightHighlightOff', }
 
@@ -257,6 +258,8 @@ endfunction
 function BrightHighlightOff()
     hi CursorLine ctermbg=none
 endfunction
+
+let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 
 " --------- indetLine ------------
 let g:indentLine_color_term = 239
