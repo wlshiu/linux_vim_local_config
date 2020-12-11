@@ -328,6 +328,14 @@ nnoremap <silent> <C-\>t :ConqueTermSplit bash<CR>
 let g:hexmode_xxd_options = '-g 1'
 let g:hexmode_patterns = '*.bin,*.exe,*.dat,*.o'
 
+"----------- DirDiff  --------------
+let g:DirDiffIgnore = ".git,.svn"
+
+"----------- autoformat  --------------
+let g:formatdef_my_cpp = '"astyle -A1 -xv -s -k -xw -w -y -m40 -p -xg -k3 -w3 --convert-tabs -xl -n --lineend=linux"'
+let g:formatters_cpp = ['c']
+
+
 "============================================
     "-----------------
     "relative line number {{{1
