@@ -377,7 +377,7 @@ let g:formatters_cpp = ['c']
             endif
 
             if (executable('ctags'))
-                silent! execute "!ctags --c++-kinds=+p --fields=+iaS --extra=+q --sort=yes -L cscope.files"
+                silent! execute "!ctags --c++-kinds=+p --fields=+iaS --extras=+q --sort=yes -L cscope.files"
             endif
 
             if (executable('cscope') && has("cscope") )
@@ -413,7 +413,7 @@ let g:formatters_cpp = ['c']
             endif
 
             if (executable('ctags'))
-                silent! execute "!ctags --c++-kinds=+p --fields=+iaS --extra=+q --sort=yes -L cscope.files"
+                silent! execute "!ctags --c++-kinds=+p --fields=+iaS --extras=+q --sort=yes -L cscope.files"
             endif
 
             if (executable('gtags'))
