@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- encoding: utf8 -*-
 
 '''
@@ -39,17 +39,32 @@ def _gen_general_editor_command(matches, patterns):
     editor = os.environ['EDITOR']
     return '%s %s' % (editor, m.filename)
 
+def _gen_subl_command(matches, patterns):
+    m = matches[0]
+    return 'subl %s:%d' % (m.filename, m.line_num)
+
+def _gen_code_command(matches, patterns):
+    m = matches[0]
+    return 'code -g %s:%d' % (m.filename, m.line_num)
+
+# Add your _gen_*_command if you use some other editor.
+_gen_edit_commands = {
+    'vi': _gen_vim_command,
+    'vim': _gen_vim_command,
+    'subl': _gen_subl_command,
+    'code': _gen_code_command,
+}
+
 # Use vim by default.
 _gen_edit_command = _gen_vim_command
 
-if 'EDITOR'in os.environ:
+if 'EDITOR' in os.environ:
     editor = os.environ['EDITOR']
-    # Add your _gen_edit_command if you don't use vim.
-    # E.g., emacs
-
-    # For a general editor, don't know how to jump to the line and highglight
-    # the pattern. Only open the file.
-    if editor != 'vi' and editor != 'vim':
+    if editor in _gen_edit_commands:
+        _gen_edit_command = _gen_edit_commands[editor]
+    else:
+        # Don't know how to jump to the line and highglight the pattern.
+        # Only open the file.
         _gen_edit_command = _gen_general_editor_command
 
 #------------------------------------------------------------------------------
@@ -99,6 +114,9 @@ def main():
                             'Useful to help filter common name such as "Start". '
                             'For example, "Start -f MySuperThread" will find out files which '
                             'contain MySuperThread and Start simultaneously.')
+    parser.add_option('-a', '--assignment', dest='assignment',
+                      action='store_true', default=False,
+                      help='Find where the first pattern is assigned (experimental feature for Go)')
     parser.add_option('-b', '--batch', dest='batch',
                       action='store_true', default=False,
                       help='Run in batch mode (i.e., no interaction).')
@@ -120,6 +138,14 @@ def main():
     parser.add_option('-p', '--path', dest='path',
                       type='string', default='',
                       help='Search symbols under specific path.')
+    parser.add_option('-e', '--extended', dest='extended',
+                      type=int, default=0,
+                      help=('Used for multiple pattern search. By default all patterns are searched'
+                            ' in the same line. With this flag, use the first pattern to fine target line'
+                            ' and search the rest patterns in the +/- N lines (default: 0).'))
+    parser.add_option('--db', dest='db_path',
+                      type='string', default='ID',
+                      help='Specify text index database path')
     options, args = parser.parse_args()
 
     if options.config:
@@ -130,9 +156,16 @@ def main():
         with open(gj_util.CONFIG_FILE, 'w') as fw:
             example = [
                 'config = {',
-                '    "binaries": [  # Each line is an ELF binary to be indexed.',
+                '    # Each line is an ELF binary to be indexed.',
+                '    # Example:',
+                '    #   ("out/debug/myprog", "out/debug")',
+                '    #',
+                '    #   Index out/debug/myprog and dynamic libraries used by myprog with sub-path "out/debug".',
+                '    #   Index no extra dynamic libraries if the second argument is an empty string.',
+                '    "binaries": [',
                 '    ],',
-                '    "path_substitution": "",  # FROM=TO. E.g., "../../=" removes the prefix "../../".',
+                '    # FROM=TO. E.g., "../../=" removes the prefix "../../".',
+                '    "path_substitution": "",',
                 '}',
                 '',
             ]
@@ -147,7 +180,7 @@ def main():
         if index_source:
             print('> Index source codes ...')
             print('')
-            result = gj_util.build_index()
+            result = gj_util.build_index(options.db_path)
 
         filename = gj_util.CONFIG_FILE
         if os.path.exists(filename):
@@ -170,6 +203,7 @@ def main():
                     gj_index.index_elf_binaries(binaries, path_substitution)
             except Exception as e:
                 print('Failed to index ELF: %s: %s' % (type(e).__name__, e.message))
+
         print('\n> Done')
         return 0 if result else 1
 
@@ -177,17 +211,22 @@ def main():
         parser.print_help()
         return 2
 
-    if not os.path.exists('ID'):
-        print('Database file "ID" is not found. Have you run "gj -i"?')
+    if not options.definition and not os.path.exists(options.db_path):
+        print('Database file "%s" is not found. Have you run "gj -i"?' % options.db_path)
         return 3
 
     patterns = process_args(args)
 
+    # Set config.
+    gj_util.config['verbose'] = options.verbose
+    gj_util.config['search_extended_lines'] = options.extended
+    gj_util.config['db_path'] = options.db_path
+
     # Find matched symbols
     if options.symbol:
-        lines = gj_util.find_symbols(patterns[0], verbose=options.verbose, path_pattern=options.path)
+        lines = gj_util.find_symbols(patterns[0], path_pattern=options.path)
         for line in lines:
-            print(line.encode('utf8'))
+            print(line)
         return 0
 
     # Find the initial matched set.
@@ -196,6 +235,8 @@ def main():
         matches = gj_util.find_declaration_or_definition(patterns[0], path_prefix=options.path)
     elif options.definition:
         matches = gj_util.find_definition(patterns[0])
+    elif options.assignment:
+        matches = gj_util.find_assignment(patterns[0], path_prefix=options.path)
     else:
         matches = gj_util.find_matches(path_prefix=options.path, filter_=options.filter_)
 
@@ -204,22 +245,21 @@ def main():
         for m in matches:
             if not options.verbose and len(m.text) > gj_util.DEFAULT_CODE_LENGTH:
                 m.text = m.text[:gj_util.DEFAULT_CODE_LENGTH] + " ..."
-            print(unicode(m).encode('utf8'))
+            print(m)
         return 0
 
     # Enter interactive mode.
     # Filter the rest or view the selected file.
-    n = 0
     while True:
-        numbers, matches, patterns = gj_util.choose_matches_interactively(matches, patterns, n, options.verbose)
-        if not numbers:
-            if n is None:
-                return 1
+        selections, matches, patterns = gj_util.choose_matches_interactively(matches, patterns)
+        if not selections:
             return 0
 
         # Edit the chosen one.
-        ms = [matches[n - 1] for n in numbers]
-        ret = os.system(_gen_edit_command(ms, patterns))
+        cmd = _gen_edit_command(selections, patterns)
+        ret = os.system(cmd)
+        if ret != 0:
+            print('Failed to execute: %s' % cmd)
 
         if ret != 0:
             return 4

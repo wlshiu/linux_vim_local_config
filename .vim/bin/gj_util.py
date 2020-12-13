@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- encoding: utf8 -*-
 
 try:
@@ -36,6 +36,12 @@ DEFAULT_CODE_LENGTH = 80
 
 DEBUG = False
 
+config = {
+    'search_extended_lines': 0,
+    'verbose': False,
+    'db_path': 'ID',
+}
+
 #-----------------------------------------------------------
 # public
 #-----------------------------------------------------------
@@ -56,12 +62,12 @@ class Match(object):
     def sort_key(match):
         return (match.filename, match.line_num)
 
-    def __unicode__(self):
-        tokens = [self.filename, self.line_num, self.column, self.text]
-        return u':'.join(map(unicode, tokens))
-
     def __str__(self):
-        return str(unicode(self))
+        tokens = [self.filename, self.line_num, self.column, self.text]
+        return ':'.join(map(str, tokens))
+
+    def is_golang(self):
+        return self.filename.endswith('.go')
 
 
 # Used by finding definition.
@@ -127,9 +133,9 @@ def check_install():
             print(msg)
             sys.exit(1)
 
-def build_index():
-    path = os.path.join(os.path.dirname(__file__), LANG_MAP_FILE)
-    return _mkid(path)
+def build_index(db_path):
+    lang_path = os.path.join(os.path.dirname(__file__), LANG_MAP_FILE)
+    return _mkid(lang_path, db_path)
 
 
 def _find_matches(pattern):
@@ -166,11 +172,14 @@ def find_matches(patterns=None, filter_='', path_prefix=''):
 
 find_matches.original_patterns = []
 
-def choose_matches_interactively(matches, patterns, last_n, verbose):
+def choose_matches_interactively(matches, patterns):
     matches = matches[:]  # Make a clone.
 
     if not hasattr(choose_matches_interactively, 'fold'):
         choose_matches_interactively.fold = False
+
+    if not hasattr(choose_matches_interactively, 'selections'):
+        choose_matches_interactively.selections = []
 
     # Enter the interactive mode.
     while True:
@@ -179,7 +188,10 @@ def choose_matches_interactively(matches, patterns, last_n, verbose):
             return [], matches, patterns
 
         matches = sorted(set(matches), key=Match.sort_key)
-        _show_list(matches, patterns, last_n, choose_matches_interactively.fold, verbose)
+        index_mapping = _show_list(matches,
+                                   patterns,
+                                   choose_matches_interactively.selections,
+                                   choose_matches_interactively.fold)
         global input
         try:
             input = raw_input
@@ -226,17 +238,22 @@ def choose_matches_interactively(matches, patterns, last_n, verbose):
     matches.sort(key=Match.sort_key)
 
     # Parse the selected number
-    numbers = parse_number(response)
-    if not numbers:
+    input_numbers = parse_number(response)
+    if not input_numbers:
         print('Invalid input.')
         return None, matches, patterns
 
-    for n in numbers:
-        if n < 1 or n > len(matches):
+    numbers = []
+    for n in input_numbers:
+        n = index_mapping.get(n, -1)
+        if n < 0 or n >= len(matches):
             print('Invalid input.')
             return None, matches, patterns
+        numbers.append(n)
 
-    return numbers, matches, patterns
+    choose_matches_interactively.selections = numbers
+
+    return [matches[n] for n in numbers], matches, patterns
 
 def find_declaration_or_definition(pattern, path_prefix=''):
     if pattern.startswith('m_') or pattern.startswith('s_'):
@@ -268,6 +285,13 @@ def find_declaration_or_definition(pattern, path_prefix=''):
     # Find definition if possible.
     result.update(_keep_possible_definition(matches, pattern))
 
+    # Special handling for Golang.
+    # 1. Remove all matches from the general rules.
+    result = set(r for r in result if not r.is_golang())
+
+    # 2. Apply customized rules.
+    result.update(_filter_declaration_or_definitions_for_golang(matches, pattern))
+
     return sorted(result, key=Match.sort_key)
 
 def find_definition(symbol):
@@ -298,7 +322,20 @@ def find_definition(symbol):
 
     return sorted(result, key=Match.sort_key)
 
-def find_symbols(pattern, verbose=False, path_pattern=''):
+# Experimental feature for Go.
+def find_assignment(symbol, path_prefix=''):
+    matches = tuple(find_matches([symbol]))
+
+    if path_prefix:
+        matches = _filter_filename(matches, '^' + path_prefix, False)
+
+    # Find Go assignments. Assume the code is well-formatted.
+    return sorted(_filter_assignment(matches, symbol), key=Match.sort_key)
+
+def find_symbols(pattern, path_pattern=''):
+    global config
+
+    verbose = config['verbose']
     if path_pattern:
         verbose = True
 
@@ -356,8 +393,8 @@ def find_symbols(pattern, verbose=False, path_pattern=''):
 #-----------------------------------------------------------
 # private
 #-----------------------------------------------------------
-def _mkid(lang_file):
-    cmd = ['mkid', '-m', lang_file]
+def _mkid(lang_file, db_path):
+    cmd = ['mkid', '-m', lang_file, '-f', db_path]
     process = subprocess.Popen(cmd,
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
@@ -390,7 +427,7 @@ def _get_idutils_install_cmd():
 def _get_gid_cmd():
     gid = 'gid'
     if platform.system() == 'Darwin':
-        if not _is_cmd_exists(gid):
+        if _is_cmd_exists('gid32'):
             gid = 'gid32'
     return gid
 
@@ -407,7 +444,7 @@ def _execute(args):
             print('\ntext: <%s>\nreturns non-utf8 result.' % text)
             print('-' * 80)
         result = []
-        for line in text.split('\n'):
+        for line in text.split(b'\n'):
             try:
                 line = line.decode('utf8')
                 result.append(line)
@@ -420,31 +457,33 @@ def _execute(args):
     return text.split('\n')
 
 def _gid(pattern):
+    global config
+
     # Support searching "FUNCTION(" or "FUNCTION()".
     # () has special meaning for gid. Do not pass it to gid.
     if pattern.endswith('('):
         pattern = pattern[:-1]
     elif pattern.endswith('()'):
         pattern = pattern[:-2]
-    cmd = [_get_gid_cmd(), pattern]
+    cmd = [_get_gid_cmd(), '-f', config['db_path'], pattern]
     return _execute(cmd)
 
 def _lid(pattern, args):
-    cmd = ['lid'] + args + [pattern]
+    global config
+
+    cmd = ['lid', '-f', config['db_path']] + args + [pattern]
     return _execute(cmd)
 
 def _highlight(pattern, text, level=2):
     def red(text):
         if sys.stdout.isatty():
-            # return '\033[1;31m%s\033[0m' % text
-            return '\e[31m%s\e[0m' % text
+            return '\033[1;31m%s\033[m' % text
         else:
             return text
 
     def green(text):
         if sys.stdout.isatty():
-            # return '\033[1;32m%s\033[0m' % text
-            return '\e[32m%s\e[0m' % text
+            return '\033[1;32m%s\033[m' % text
         else:
             return text
 
@@ -482,52 +521,56 @@ def _highlight(pattern, text, level=2):
 
     return ''.join(result)
 
-def _show_list(matches, patterns, last_n, fold, verbose):
+def _show_list(matches, patterns, selections, fold):
     def yellow(text):
         if sys.stdout.isatty():
-            # return '\033[1;33m%s\033[0m' % text
-            return '\e[33m%s\e[0m' % text
+            return '\033[1;33m%s\033[m' % text
         else:
             return text
 
     def green(text):
         if sys.stdout.isatty():
-            # return '\033[1;32m%s\033[0m' % text
-            return '\e[32m%s\e[0m' % text
+            return '\033[1;32m%s\033[m' % text
         else:
             return text
 
     def red(text):
         if sys.stdout.isatty():
-            # return '\033[1;31m%s\033[0m' % text
-            return '\e[31m%s\e[0m' % text
+            return '\033[1;31m%s\033[m' % text
         else:
             return text
 
     def black(text):
         if sys.stdout.isatty():
-            # return '\033[1;30m%s\033[0m' % text
-            return '\e[30m%s\e[0m' % text
+            return '\033[1;30m%s\033[m' % text
         else:
             return text
 
+    global config
+
     os.system('clear')
     last_filename = ''
+    index_mapping = {}
+    user_index = 1
     for i, m in enumerate(matches):
         if fold and m.filename == last_filename:
             continue
 
         last_filename = m.filename
-        i += 1
-        if i == last_n:
-            print(black('(%s) %s:%s:%s' % (i, m.line_num, m.filename, m.text)))
+        if i in selections:
+            print(black('(%s) %s:%s:%s' % (user_index, m.line_num, m.filename, m.text)))
         else:
             code = m.text
-            if not verbose and len(code) > DEFAULT_CODE_LENGTH:
+            if not config['verbose'] and len(code) > DEFAULT_CODE_LENGTH:
                 code = code[:DEFAULT_CODE_LENGTH] + " ..."
             for pattern in patterns:
                 code = _highlight(pattern, code)
-            print('(%s) %s:%s:%s' % (red(i), yellow(m.line_num), green(m.filename), code))
+            print('(%s) %s:%s:%s' % (red(user_index), yellow(m.line_num), green(m.filename), code))
+
+        index_mapping[user_index] = i
+        user_index += 1
+
+    return index_mapping
 
 def _filter_statement(all_, exclude):
     matches = [m for m in all_ if re.search(';\s*$', m.text)]
@@ -535,24 +578,77 @@ def _filter_statement(all_, exclude):
         return matches
     return _subtract_list(all_, matches)
 
+def _filter_assignment(all_, symbol):
+    patterns = [
+        '%s = ' % symbol,        # normal case.
+        '%s := ' % symbol,       # declaration.
+        '%s\[.+\] = ' % symbol,  # map/array/slice.
+        '%s: ' % symbol,         # map's keys/struct's member fields
+    ]
+    result = set()
+    for p in patterns:
+        result.update((m for m in all_ if re.search(p, m.text)))
+    return result
+
 def _filter_matches(matches, pattern):
+    global config
+
     negative_symbol = '~'
 
     new_matches = []
     new_pattern = pattern[1:] if pattern.startswith(negative_symbol) else pattern
     for m in matches:
         # Special case: find the assignment operation and exclude equality operators.
-        if new_pattern == '=':
-            matched = not not re.search('[^=]=[^=]', m.text)
-            if not matched:
-                matched = not not re.search('[^=]=$', m.text)
+        if config['search_extended_lines'] > 0:
+            lines = []
+            with open(m.filename) as fr:
+                i = 0
+                for line in fr:
+                    i += 1
+                    if abs(i - m.line_num) > config['search_extended_lines']:
+                        continue
+                    lines.append(line.strip())
+            text = '\n'.join(lines)
         else:
-            matched = not not re.search('\\b%s\\b' % new_pattern, m.text)
+            text = m.text
+        if new_pattern == '=':
+            matched = not not re.search('[^=]=[^=]', text)
+            if not matched:
+                matched = not not re.search('[^=]=$', text)
+        elif new_pattern == '{':
+            # NOTE: Special handling for Go.
+            # Searching "Type {" can help finding the initialization of Type.
+            matched = not not re.search('%s' % new_pattern, text)
+        else:
+            matched = not not re.search('\\b%s\\b' % new_pattern, text)
         if pattern.startswith(negative_symbol):
             matched = not matched
         if matched:
             new_matches.append(m)
 
+    return new_matches
+
+def _filter_declaration_or_definitions_for_golang(matches, pattern):
+    new_matches = []
+    for m in matches:
+        if not m.is_golang():
+            continue
+
+        text = m.text.strip()
+        if re.match('func (\(.+\) )?%s\(.*{(.*})?$' % pattern, text):
+            new_matches.append(m)
+        elif re.match('func (\(.+\) )?%s\(.*,$' % pattern, text):
+            # arguments too long, end with some argument.
+            new_matches.append(m)
+        elif re.match('func \(.+ \*?%s\) [a-zA-Z][a-zA-Z0-9]*\(.*$' % pattern, text):
+            # |pattern|'s methods
+            new_matches.append(m)
+        elif text.endswith(pattern + ' struct {'):
+            new_matches.append(m)
+        elif text.endswith(pattern + ' interface {'):
+            new_matches.append(m)
+        elif text.startswith('var ' + pattern) or text.startswith('const ' + pattern):
+            new_matches.append(m)
     return new_matches
 
 def _filter_filename(all_, pattern, exclude):
