@@ -507,6 +507,26 @@ Supported Features
    \pa ...      like \ra ... \rz, except that blanks are considered
                 to be transparent
 
+-------------- *DirDiff*
+比較兩個資料夾的差異 >
+    :DirDiff folder1 folder2
+<
+
+reflash 兩個資料夾的差異 >
+    :DirDiffUpdate
+<
+
+<leader>dg -    Diff get: maps to :diffget<CR>
+<leader>dp -    Diff put: maps to :diffput<CR>
+<leader>dj -    Diff next: (think j for down)
+<leader>dk -    Diff previous: (think k for up)
+
+
+-------------- *autoformat*
+sytax format the current file >
+    :Autoformat
+<
+
 ==============================================================================
 MISC                                         *misc*
 
