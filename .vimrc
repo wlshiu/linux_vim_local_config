@@ -190,11 +190,13 @@ nmap \q :ccl<CR>
 if &diff
     set cursorline
     set wrap
+    set diffopt+=iwhite
 
     map <A-Down> ]c
     map <A-UP>   [c
 else
     set nocursorline
+    set diffopt-=iwhite
 endif
 
 " ----- set syntax for unknown file type ----------------
