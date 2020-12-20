@@ -527,6 +527,9 @@ sytax format the current file >
     :Autoformat
 <
 
+<leader>a + <sync_word> -       e.g. <leader>a=, align '='
+                                     <leader>a:, align ':'
+
 ==============================================================================
 MISC                                         *misc*
 
