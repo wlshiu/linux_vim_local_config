@@ -220,6 +220,7 @@ let g:tagbar_left = 1
 let g:tagbar_sort = 0
 let g:tagbar_autoshowtag = 1
 let g:tagbar_autoopen = 1
+let g:tagbar_ctags_bin='/usr/bin/ctags-exuberant'
 "// hot key
 nmap tl :TagbarToggle<CR>
 
