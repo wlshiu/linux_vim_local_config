@@ -14,14 +14,27 @@ REQUIREMENTS                                    *dirdiff-requirements*
     tested this on cygwin's version on Windows.  If you have a diff that
     doesn't support -x or -I flag, do not set variable g:DirDiffExcludes and
     g:DirDiffIgnore to "".  It should still work.
-  - On Windows, you need to have "xcopy", "copy", "del", and "rd" in your
+  - On Windows, you need to have "xcopy", "copy", "del" "rd" and "xxd" in your
     path.
-  - On Unix, you need to have "rm" and "cp" in your path.
+  - On Unix, you need to have "rm", "cp" and "xxd" in your path.
 
 INSTALLATION                                    *dirdiff-installation*
 
-    cd ~/.vim/bundle
-    git clone git://github.com/will133/vim-dirdiff
+    With pathogen.vim:
+
+        $ cd ~/.vim/bundle
+        $ git clone git://github.com/will133/vim-dirdiff
+
+    With vim-plug, put this in your ~/.vimrc:
+
+        Plug 'will133/vim-dirdiff'
+
+    With Vim 8+'s default packaging system, run this:
+
+        $ mkdir -p ~/.vim/pack/bundle/start
+        $ cd ~/.vim/pack/bundle/start
+        $ git clone git://github.com/will133/vim-dirdiff
+
 
 USAGE                                           *dirdiff-usage* *:DirDiff*
  >
@@ -80,8 +93,14 @@ The following commands can be used inside the diff window:
 <a>                     Sets additional arguments for diff, eg. -w to ignore
                         white space, etc.
 
+                                                *dirdiff-h*
+<h>                     Toggle xxd hex mode on or off.
+
+                                                *dirdiff-w*
+<w>                     Toggle wrap and nowrap mode
+
 <q>                     Quit DirDiff
- 
+
 The following comamnds can be used in the Vim diff mode if this is global flag
 is set to 1 (default to 0): >
 
@@ -89,19 +108,30 @@ is set to 1 (default to 0): >
 <
 
 Note: by default these would not be added, unlike previous version.  It is
-preferable to not change people's mappings by default.
+preferable to not change people's mappings by default. These mappings can be
+overriden by their corresponding variables added to .vimrc.
 
                                                 *dirdiff-leader-dg*
 <Leader>dg              Diff get: maps to :diffget<CR>
-
+>
+    let g:DirDiffGetKeyMap = '<Leader>dg'
+<
                                                 *dirdiff-leader-dp*
 <Leader>dp              Diff put: maps to :diffput<CR>
-
+>
+    let g:DirDiffPutKeyMap = '<Leader>dp'
+<
                                                 *dirdiff-leader-dj*
-<Leader>dj              Diff next: (think j for down) 
+<Leader>dj              Diff next: (think j for down)
+>
+    let g:DirDiffNextKeyMap = '<Leader>dj'
+<
 
                                                 *dirdiff-leader-dk*
 <Leader>dk              Diff previous: (think k for up)
+>
+    let g:DirDiffPrevKeyMap = '<Leader>dk'
+<
 
 
 OPTIONS                                         *dirdiff-options*
@@ -114,6 +144,10 @@ Default to do nothing: >
 
     let g:DirDiffEnableMappings = 0
 <
+Ignore FileName case during diff: >
+
+    let g:DirDiffIgnoreFileNameCase = 0
+
 Sets default exclude pattern: >
 
     let g:DirDiffExcludes = "CVS,*.class,*.exe,.*.swp"
@@ -142,6 +176,16 @@ You can set g:DirDiffForceLang to "" in turn this off (the system's LANG would
 be used in such case).  You may need to customize the following variables so
 DirDiff can match the correct text in your locale.
 
+Force the diff execution shell: >
+
+    let g:DirDiffForceShell = "C"
+
+If empty, the default shell would not be changed before running the diff
+command.  If not, then the shell would be set to this before running the diff
+command (and restored after the execuation).  This is useful for people who
+are using shells that are not compatible.  If you are getting a message saying
+that there's no diff for some shell, you may want to set this to "sh".
+
 Dynamically figure out the diff text.  If you are using and i18n version of
 diff, this will try to get the specific diff text during runtime.  It's turned
 off by default.  If you are always targetting a specific version of diff, you
@@ -165,6 +209,20 @@ String used for the English equivalent "Only in "): >
 
     let g:DirDiffTextOnlyIn = "Only in "
 
+To specify a valid theme (e.g. github): >
+
+    let g:DirDiffTheme = "github"
+
+To use [ and ] rather than [c and ]c motions: >
+
+    let g:DirDiffSimpleMap = 1
+
+Add extra options to the "diff" tool. For example, use "-w" to ignore white
+spaces or "-N" to list all new files even when inside a new folder (instead of
+just listing the new folder name)
+
+    let g:DirDiffAddArgs = "-w"
+
 OPTIONS EXAMPLE                                 *dirdiff-options-example*
 
 This is an example for setting DirDiffExcludes and DirDiffIgnore in addition
@@ -176,7 +234,7 @@ For example, you can set these in your .vimrc file: >
     let g:DirDiffExcludes = "CVS,*.class,*.o"
     let g:DirDiffIgnore = "Id:"
     " ignore white space in diff
-    let g:DirDiffAddArgs = "-w" 
+    let g:DirDiffAddArgs = "-w"
     let g:DirDiffEnableMappings = 1
 <
 
@@ -222,6 +280,9 @@ THANKS                                          *dirdiff-thanks*
 
 HISTORY                                         *dirdiff-history*
 
+1.1.7  - Added support for "hex mode" and "wrap mode"
+1.1.6  - Fixed problem with vim 8.2 where the :drop would not work with
+         wildignore.  Added option to set shell.
 1.1.5  - Fixed split windows problems caused by some .vimrc settings.
 1.1.4  - Fixed split windows problems caused by some .vimrc settings.
 1.1.3  - Applied the patch to 1.1.2 by Wu WeiWei in order to make diff
@@ -244,10 +305,10 @@ HISTORY                                         *dirdiff-history*
        exclude and ignore pattern.
 0.91 - Clean up delete routine.
      - Added interactive mode.
-     - Added multiple entries of exclude and ignore pattern.  
+     - Added multiple entries of exclude and ignore pattern.
      - Custom configuration through global variables.
      - Change exclude and ignore patterns on the fly.
-      
+
 0.9  - Reorganization of the interface.  Much simplier dialog for
        synchronization.  Support for range synchronization option (REALLY
        powerful)
