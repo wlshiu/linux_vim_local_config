@@ -32,6 +32,9 @@ vdiff() {
         return 1
     fi
 
+    local left="${1}"
+    local right="${2}"
+
     if [ -d "${left}" ] && [ -d "${right}" ]; then
         vim +"DirDiff ${left} ${right}"
     else

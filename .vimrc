@@ -27,6 +27,8 @@
 " Plugin 'Tuxdude/mark.vim'
 " Plugin 'jeetsukumaran/vim-buffergator'
 " Plugin 'Yggdroot/indentLine'
+" Plugin 'will133/vim-dirdiff'
+" Plugin 'AndrewRadev/linediff.vim'
 "
 " " All of your Plugins must be added before the following line
 " call vundle#end()            " required
@@ -116,8 +118,8 @@ set linebreak
 " re-set in vim if no cursor line highlight
 set cursorline
 set cursorcolumn
-hi CursorLine cterm=none ctermbg=0 " ctermfg=White
-hi CursorColumn cterm=none ctermbg=0 " ctermfg=White
+hi CursorLine cterm=none ctermbg=0 " ctermfg=White "
+hi CursorColumn cterm=none ctermbg=0 " ctermfg=White "
 
 " set backspace=indent,eol
 set backspace=2
@@ -186,14 +188,32 @@ nmap \q :ccl<CR>
 " endif
 
 
+" ----------- vimdiff ---------------------
+" move to different
+map <A-Down> ]c
+map <A-UP>   [c
+
+" save dual files
+map <C-s>   :wa<CR>
+
+" reflash layout
+" map <silent> <C-\>u :diffupdate<CR>
+map <C-\>u :diffupdate<CR>
+
+" do fatch from the other
+map <Leader>df  do
+
+" do push to the other
+map <Leader>dp  dp
+
+" save and quit dual windows
+map <Leader>q :qwa<CR>
+
 "// vimdiff move to different
 if &diff
     set cursorline
     set wrap
     set diffopt+=iwhite
-
-    map <A-Down> ]c
-    map <A-UP>   [c
 else
     set nocursorline
     set diffopt-=iwhite
@@ -250,7 +270,9 @@ let g:ctrlp_custom_ignore = {
   \ }
 
 let g:ctrlp_match_window = 'results:200'
-let g:ctrlp_user_command = 'find %s -type f -name "*.h*" -o -name "*.c*" -o -name "*.py" -o -iname "*.S" -o -name "*.ld*" -o -name "*.mk" -o -name "Makefile"'       " MacOSX/Linux
+
+" MacOSX/Linux
+let g:ctrlp_user_command = 'find %s -type f -name "*.h*" -o -name "*.c*" -o -name "*.py" -o -iname "*.S" -o -name "*.ld*" -o -name "*.mk" -o -name "Makefile"'
 
 let g:ctrlp_buffer_func = { 'enter': 'BrightHighlightOn', 'exit':  'BrightHighlightOff', }
 
@@ -294,18 +316,29 @@ map <Leader>ag :Ack! <C-R>=expand("<cword>")<CR><CR>
 " <Leader>gj to search
 
 "----------- gtags --------------
-set cscopetag
 set cscopeprg=gtags-cscope
-let GtagsCscope_Auto_Load = 1
 let GtagsCscope_Quiet = 1
 let Gtags_No_Auto_Jump = 1
+
+" To use the default key/mouse mapping:
 let GtagsCscope_Auto_Map = 1
+" To ignore letter case when searching:
+let GtagsCscope_Ignore_Case = 1
+" To use absolute path name:
+let GtagsCscope_Absolute_Path = 1
+" To deterring interruption:
+let GtagsCscope_Keep_Alive = 1
+" If you hope auto loading:
+let GtagsCscope_Auto_Load = 1
+" To use 'vim -t ', ':tag' and '<C-]>'
+set cscopetag
 
 nmap <C-\>] :Gtags -r <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>' :Gtags -s <C-R>=expand("<cword>")<CR><CR>
 
 "----------- NERD_commenter --------------
-map <Leader>q <Leader>c<space>
+" map <Leader>q <Leader>c<space>
+
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
 
@@ -333,7 +366,9 @@ let g:hexmode_xxd_options = '-g 1'
 let g:hexmode_patterns = '*.bin,*.exe,*.dat,*.o'
 
 "----------- DirDiff  --------------
-let g:DirDiffIgnore = ".git,.svn"
+let g:DirDiffEnableMappings = 0
+let g:DirDiffIgnore = ".git,.svn,out,Project"
+let g:DirDiffExcludes = 'CVS,.git,.svn,out,*.class,*.exe,*.swp,*.o,*.d,tags,ID,GRTAGS,GTAGS,GPATH'
 
 "----------- autoformat  --------------
 let g:formatdef_my_cpp = '"astyle -A1 -xv -s -k -xw -w -y -m40 -p -xg -k3 -w3 --convert-tabs -xl -n --lineend=linux"'
