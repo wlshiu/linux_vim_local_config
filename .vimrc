@@ -206,14 +206,16 @@ map <Leader>df  do
 " do push to the other
 map <Leader>dp  dp
 
-" save and quit dual windows
-map <Leader>q :qwa<CR>
+" quit dual windows
+map <Leader>q :qa<CR>
 
 "// vimdiff move to different
 if &diff
-    set cursorline
+    " set cursorline
+    set nocursorline
     set wrap
-    set diffopt+=iwhite
+    " set diffopt+=iwhite
+    set diffopt-=iwhite
 else
     set nocursorline
     set diffopt-=iwhite
