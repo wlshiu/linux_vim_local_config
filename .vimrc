@@ -176,18 +176,19 @@ map <C-l> <C-W>l
 nmap ms <Home>
 nmap mt <End>
 "// Delete trailing white space
-nmap \de <Esc>:%s/\s\+$//g <CR>
+nmap <Leader>de <Esc>:%s/\s\+$//g <CR>
 "
 "// Remove the Windows ^M - when the encodings gets messed up
-nmap \dm <Esc>:%s/\r//g <CR>
+nmap <Leader>dm <Esc>:%s/\r//g <CR>
 
-nmap \q :ccl<CR>
+nmap <Leader>q :ccl<CR>
 
 " if filereadable("cscope.out")
     " execute "cs add cscope.out"
 " endif
 
 
+"======================================================================
 " ----------- vimdiff ---------------------
 " move to different
 map <A-Down> ]c
@@ -207,7 +208,7 @@ map <Leader>df  do
 map <Leader>dp  dp
 
 " quit dual windows
-map <Leader>q :qa<CR>
+map <A-q> :qa<CR>
 
 "// vimdiff move to different
 if &diff
@@ -225,6 +226,7 @@ else
     set diffopt-=iwhite
 endif
 
+"======================================================================
 " ----- set syntax for unknown file type ----------------
 au BufNewFile,BufRead *.rss set filetype=xml
 au BufNewFile,BufRead *.md set filetype=markdown
@@ -233,6 +235,7 @@ au BufRead,BufNewFile *.expand set filetype=rtl
 au BufRead,BufNewFile *.S set filetype=gas
 au BufRead,BufNewFile *.s set filetype=gas
 
+"======================================================================
 " ----- set python fold ----------------
 autocmd FileType python setlocal foldmethod=indent
 set foldlevel=5
@@ -241,15 +244,18 @@ vnoremap <space> zc
 
 let python_highlight_all=1
 
+"======================================================================
 " ----------- tagbar ---------------------
 let g:tagbar_left = 1
 let g:tagbar_sort = 0
 let g:tagbar_autoshowtag = 1
 let g:tagbar_autoopen = 1
-let g:tagbar_ctags_bin='/usr/bin/ctags-exuberant'
+" let g:tagbar_ctags_bin='/usr/bin/ctags-exuberant'
+let g:tagbar_ctags_bin='/usr/bin/ctags'
 "// hot key
 nmap tl :TagbarToggle<CR>
 
+"======================================================================
 " ----------- NERDTree ---------------------
 let NERDTreeWinPos='right'
 let NERDTreeQuitOnOpen=1
@@ -264,6 +270,7 @@ let NERDTreeIgnore += ['\.o$','\.a$']
 nmap nt :NERDTreeToggle<CR>
 " nmap <A-n> :NERDTreeToggle<CR>
 
+"======================================================================
 " ----------- CtrlP ---------------------
 " let g:ctrlp_map = '<A-w>'
 let g:ctrlp_clear_cache_on_exit=0
@@ -292,35 +299,63 @@ endfunction
 
 let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 
+"======================================================================
 " --------- indetLine ------------
 let g:indentLine_color_term = 239
 let g:indentLine_char = '¦'
 
+"======================================================================
 " ----------- buffergator ----------
 let g:buffergator_viewport_split_policy="T"
 
+"======================================================================
 " ----------- bash-support ----------
 let g:BASH_MapLeader = ','
 
+"======================================================================
+" ----------- EasyGrep ----------
+map <Leader>f  <Leader>vv
+
+let g:EasyGrepFileAssociations=$HOME.'/.vim/plugin/EasyGrepFileAssociations' "set the location of the EasyGrep file associations"
+" let g:EasyGrepMode = 0
+let g:EasyGrepcommand = 0 " 0:vimgrep, 1: grep"
+let g:EasyGrepRecursive = 1
+let g:EasyGrepIgnoreCase = 1
+let g:EasyGrepHidden = 1 " search hidden files"
+let g:EasyGrepFilesToExclude= 'CVS,.git,.svn,out,*.class,*.exe,*.swp,*.o,*.d,tags,ID,GRTAGS,GTAGS,GPATH'
+let g:EasyGrepAllOptionsInExplorer = 1 "Shortcut keys '\vo' to configurate options "
+let g:EasyGrepWindow = 0 " use Quickfix window"
+let g:EasyGrepJumpToMatch = 0 "jump to first mach"
+let g:EasyGrepInvertWholeWord = 0
+let g:EasyGrepFileAssociationsInExplorer = 1
+let g:EasyGrepReplaceWindowMode = 0
+
+"======================================================================
 " ----------- vimgrep ----------
 " When you press <Leader>gv you vimgrep after the selected text
 nnoremap <silent> <Leader>gv :vimgrep! /<C-R>=expand("<cword>")<CR>/j **/*.[chS]<CR>
 
 " Open vimgrep and put the cursor in the right position
-map <Leader>f :vimgrep /<C-R>=expand("<cword>")<CR>/j **/*.
+" map <Leader>f :vimgrep /<C-R>=expand("<cword>")<CR>/j **/*.
 
 " type your pattern
 " map <leader>g :vimgrep //j **/*.<left><left><left><left><left><left><left><left>
 
+
+"======================================================================
 " ----------- Ack ----------
 let g:ackhighlight = 1
 let g:ackprg = 'ag --nogroup --column --color-match --color-line-number --nocolor --ignore tags'
 map <Leader>ag :Ack! <C-R>=expand("<cword>")<CR><CR>
 
+
+"======================================================================
 " ----------- gj ----------
 " It MUST execute 'gj -i' with idutils at target directory
 " <Leader>gj to search
 
+
+"======================================================================
 "----------- gtags --------------
 set cscopeprg=gtags-cscope
 let GtagsCscope_Quiet = 1
@@ -342,8 +377,10 @@ set cscopetag
 nmap <C-\>] :Gtags -r <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>' :Gtags -s <C-R>=expand("<cword>")<CR><CR>
 
+
+"======================================================================
 "----------- NERD_commenter --------------
-" map <Leader>q <Leader>c<space>
+map <C-q> <Leader>c<space>
 
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
@@ -363,19 +400,24 @@ let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
 
+
+"======================================================================
 "----------- conque.vim --------------
 " Terminal
 nnoremap <silent> <C-\>t :ConqueTermSplit bash<CR>
 
+"======================================================================
 "----------- Hexmode  --------------
 let g:hexmode_xxd_options = '-g 1'
 let g:hexmode_patterns = '*.bin,*.exe,*.dat,*.o'
 
+"======================================================================
 "----------- DirDiff  --------------
 let g:DirDiffEnableMappings = 0
 let g:DirDiffIgnore = ".git,.svn,out,Project"
 let g:DirDiffExcludes = 'CVS,.git,.svn,out,*.class,*.exe,*.swp,*.o,*.d,tags,ID,GRTAGS,GTAGS,GPATH'
 
+"======================================================================
 "----------- autoformat  --------------
 let g:formatdef_my_cpp = '"astyle -A1 -xv -s -k -xw -w -y -m40 -p -xg -k3 -w3 --convert-tabs -xl -n --lineend=linux"'
 let g:formatters_cpp = ['c']
@@ -490,7 +532,7 @@ let g:formatters_cpp = ['c']
     " remove trailing white space : {{{1
     function! AddTitle()
         call append(0,"")
-        call append(1,"Copyright (c) 2019 Wei-Lun Hsu. All Rights Reserved.")
+        call append(1,"Copyright (c) 2021 Wei-Lun Hsu. All Rights Reserved.")
         call append(2,"")
         call append(3,"@file ".expand("%:t"))
         call append(4,"@author Wei-Lun Hsu")
