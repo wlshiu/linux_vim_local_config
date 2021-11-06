@@ -5,8 +5,8 @@
 call plug#begin('~/.vim/plugged')
 "// ps. You MUST use the '' symbol
 
-" Plug 'Yggdroot/LeaderF', { 'do': '.\install.bat' }
-Plug 'Yggdroot/LeaderF'
+Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
+" Plug 'Yggdroot/LeaderF'
 Plug 'ludovicchabant/vim-gutentags'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 " Plug 'junegunn/fzf.vim'
@@ -204,7 +204,7 @@ set autoread
 set mouse=a
 
 "// disable ATL key
-set winaltkeys=no
+" set winaltkeys=no
 
 "// change color of status when enter insert mode
 if version >= 700
@@ -293,7 +293,7 @@ if &diff
     map <leader>2 :diffget BASE<CR>
     map <leader>3 :diffget REMOTE<CR>
 else
-    set nocursorline
+    " set nocursorline
     set diffopt-=iwhite
 endif
 
@@ -372,8 +372,15 @@ endif
     " To use 'vim -t ', ':tag' and '<C-]>'
     set cscopetag
 
-    nmap <C-\>] :Gtags -r <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>' :Gtags -s <C-R>=expand("<cword>")<CR><CR>
+    let $GTAGSLABEL = 'native-pygments'
+
+    "/**
+    " * define 'export $GTAGSCONF=$HOME/.vim/gtags.conf' in .bashrc
+    " */
+    " let $GTAGSCONF = '~/.vim/gtags.conf'
+
+    " nmap <C-\>] :Gtags -r <C-R>=expand("<cword>")<CR><CR>
+    " nmap <C-\>' :Gtags -s <C-R>=expand("<cword>")<CR><CR>
 " }}}1
 
 "----------- NERD_commenter --------- {{{1
@@ -480,74 +487,48 @@ endif
 
 
 " ----------- LeaderF ------ {{{1
-	noremap <C-R> :LeaderfMruCwd<CR>
+	" noremap <C-R> :LeaderfMruCwd<CR>
+
+    "/**
+    " * enter functions search mode
+    " * ps. move cursor with C-j, or C-k
+    " */
 	noremap <leader>ff :LeaderfFunction<CR>
 
+    "/**
+    " * enter files search mode
+    " * ps. move cursor with C-j, or C-k
+    " */
+	noremap <leader>f :LeaderfFile<CR>
+
+    "/**
+    " * enter files search mode, search opened files in history list
+    " * ps. move cursor with C-j, or C-k
+    " */
+    nnoremap <silent> <Leader>fm :Leaderf mru<CR>
+
+    "/**
+    " * enter buffer search mode, search current buffers
+    " * ps. move cursor with C-j, or C-k
+    " */
+    noremap <leader>fb :LeaderfBuffer<CR>
+
     let g:Lf_WildIgnore = {
-                \ 'dir': ['.svn','.git','.hg','.vscode','out',''],
-                \ 'file': ['*.swp','~$*','*.bak','*.exe','*.o','*.so','*.py[co]','*.d','*.elf','*.i']
+                \ 'dir': ['.svn','.git','.hg','.vscode','out'],
+                \ 'file': ['tags','TAGS','ID','GPATH','GRTAGS','GTAGS','cscope*','*.md','*.swp','~$*','*.bak','*.exe','*.o','*.so','*.py[co]','*.d','*.elf','*.i']
                 \}
 
 	let g:Lf_GtagsAutoGenerate = 1
 	let g:Lf_Gtagslabel = 'native-pygments'
-
-    let g:Lf_WorkingDirectoryMode = 'AF'
-    "/**
-    " * configure pettern (file or directory) to define the working directory
-    " */
-    let g:Lf_RootMarkers = ['.git', '.svn', '.hg', '.project', '.root']
-
-    if (executable('rg'))
-        "// search word under cursor, the pattern is treated as regex, and enter normal mode directly
-        noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
-        " noremap <C-F> :<C-U><C-R>=printf("Leaderf rg -e %s ", expand("<cword>"))<CR>
-
-        "/* search word under cursor, the pattern is treated as regex,
-        " * append the result to previous search results.
-        " */
-        noremap <C-G> :<C-U><C-R>=printf("Leaderf! rg --append -e %s ", expand("<cword>"))<CR>
-
-        "// search word under cursor literally only in current buffer
-        noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg -F --current-buffer -e %s ", expand("<cword>"))<CR>
-
-        "// search word under cursor literally in all listed buffers
-        noremap <C-D> :<C-U><C-R>=printf("Leaderf! rg -F --all-buffers -e %s ", expand("<cword>"))<CR>
-
-        "// search visually selected text literally, don't quit LeaderF after accepting an entry
-        xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F --stayOpen -e %s ", leaderf#Rg#visual())<CR>
-
-        "// recall last search. If the result window is closed, reopen it.
-        noremap go :<C-U>Leaderf! rg --recall<CR>
-
-        "// search word under cursor in *.h and *.cpp files.
-        noremap <Leader>a :<C-U><C-R>=printf("Leaderf! rg -e %s -g *.h -g *.c -g *.cpp", expand("<cword>"))<CR>
-        "// the same as above
-        noremap <Leader>a :<C-U><C-R>=printf("Leaderf! rg -e %s -g *.{h,c,cpp}", expand("<cword>"))<CR>
-
-        "// search word under cursor in cpp and java files.
-        noremap <Leader>b :<C-U><C-R>=printf("Leaderf! rg -e %s -t cpp -t java", expand("<cword>"))<CR>
-
-        "/ search word under cursor in cpp files, exclude the *.hpp files
-        noremap <Leader>c :<C-U><C-R>=printf("Leaderf! rg -e %s -t cpp -g !*.hpp", expand("<cword>"))<CR>
-
-    else
-
-        noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
-        noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
-        noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
-        noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
-        noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
-    endif
-
     let s:gtag_cachedir = expand('~/.cache/gtags')
     "// mkdir ~/.cache/gtags if it does not exist
     if !isdirectory(s:gtag_cachedir)
         silent! call mkdir(s:gtag_cachedir, 'p')
     endif
 
-    let g:Lf_UseVersionControlTool = 0 "set 1: use .gitignor to filter"
-    " let g:Lf_DefaultExternalTool = 'rg'
-    let g:Lf_PreviewInPopup = 1
+    let g:Lf_UseVersionControlTool = 0  "set 1: use .gitignor to filter"
+    " let g:Lf_WindowPosition = 'popup'   "open LeaderF with popup window"
+    let g:Lf_PreviewInPopup = 0         "set 1: enable preview windeow with popup window"
     let g:Lf_ReverseOrder = 0
     let g:Lf_CacheDirectory = s:gtag_cachedir
     let g:Lf_PreviewResult = {
@@ -563,8 +544,46 @@ endif
             \ 'Gtags': 0
             \}
 
+    let g:Lf_WorkingDirectoryMode = 'AF'
+    "/**
+    " * configure pettern (file or directory) to define the working directory
+    " */
+    let g:Lf_RootMarkers = ['.git', '.svn', '.hg', '.project', '.root']
 
-	highlight Lf_hl_rgHighlight guifg=#000000 guibg=#CCCC66 ctermfg=green ctermbg=185
+    if (executable('rg'))
+        let g:Lf_DefaultExternalTool = 'rg'
+        "/**
+        " * move cursor with C-n, C-p, C-j, or C-k
+        " */
+
+        "// search word under cursor, the pattern is treated as regex, and enter normal mode directly
+        noremap <Leader>rg :<C-U><C-R>=printf("Leaderf! rg --stayOpen -g !**/tags -g !ID -g !GPATH -g !GRTAGS -g !GTAGS -e %s ", expand("<cword>"))<CR><CR>
+
+        "/* search word under cursor, the pattern is treated as regex,
+        " * append the result to previous search results.
+        " */
+        " noremap <C-G> :<C-U><C-R>=printf("Leaderf! rg --append -e %s ", expand("<cword>"))<CR>
+
+        "// search word under cursor in *.h, *.c and *.cpp files.
+        noremap <Leader>a :<C-U><C-R>=printf("Leaderf! rg -e %s -g *.{h,c,cpp,s,S}", expand("<cword>"))<CR>
+
+        "// search word under cursor in cpp files and java files, exclude the *.hpp files
+        " noremap <Leader>c :<C-U><C-R>=printf("Leaderf! rg -e %s -t cpp -t java -g !*.hpp", expand("<cword>"))<CR>
+
+    else
+        if (executable('gtags'))
+            noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+            noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+            noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+            noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+            noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+        else
+            execute "echo 'No gtags or rg'"
+        endif
+    endif
+
+
+	highlight Lf_hl_rgHighlight guifg=#000000 guibg=#CCCC66 ctermfg=0 ctermbg=185
 	highlight Lf_hl_match gui=bold guifg=Blue cterm=bold ctermfg=green
 	highlight Lf_hl_match0 gui=bold guifg=Blue cterm=bold ctermfg=green
 	highlight Lf_hl_match1 gui=bold guifg=Blue cterm=bold ctermfg=green

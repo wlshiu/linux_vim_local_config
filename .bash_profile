@@ -24,6 +24,8 @@ parse_git_branch() {
 PS1="\n\e[1;0m[\e[0;32m\u\e[0;35m@\e[0;32m\h\e[1;0m]\e[1;0m[\e[0;31m\w\e[1;0m]\e[0;33m\$(parse_git_branch)\e[1;0m\n$ "
 export PS1
 
+export GTAGSCONF=$HOME/.vim/gtags.conf
+
 vdiff() {
     if [ "${#}" -ne 2 ]; then
         echo -e "vdiff requires two arguments"
