@@ -545,13 +545,19 @@ endif
             \}
 
     let g:Lf_WorkingDirectoryMode = 'AF'
+
     "/**
     " * configure pettern (file or directory) to define the working directory
     " */
     let g:Lf_RootMarkers = ['.git', '.svn', '.hg', '.project', '.root']
 
     if (executable('rg'))
+        "/**
+        " * rg binary: https://github.com/BurntSushi/ripgrep/releases
+        " *     ubuntu: '$ sudo apt-get install ripgrep'
+        " */
         let g:Lf_DefaultExternalTool = 'rg'
+
         "/**
         " * move cursor with C-n, C-p, C-j, or C-k
         " */
