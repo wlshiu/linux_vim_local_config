@@ -337,7 +337,7 @@ syntax format
     使用 C-n, C-p, C-j, or C-k移動
 
     \f      呼叫檔案搜尋介面
-    \ff     呼叫 function搜尋介面
+    \fs     呼叫 symbol(function) 搜尋介面
     \rg     使用 'rg' 搜尋目前 cursor 的 word
     \ft     使用 'rg' 搜尋目前 cursor 的 word, 並選擇 file type
     \fb     呼叫 buffer 搜尋介面

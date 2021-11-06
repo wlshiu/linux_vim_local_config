@@ -496,10 +496,10 @@ endif
 	" noremap <C-R> :LeaderfMruCwd<CR>
 
     "/**
-    " * enter functions search mode
+    " * enter functions (in the current buffer) search mode
     " * ps. move cursor with C-j, or C-k
     " */
-	noremap <leader>ff :LeaderfFunction<CR>
+	noremap <leader>fs :LeaderfFunctionAll<CR>
 
     "/**
     " * enter files search mode
@@ -532,6 +532,9 @@ endif
         silent! call mkdir(s:gtag_cachedir, 'p')
     endif
 
+    let g:Lf_ShortcutF = '<C-P>'
+    let g:Lf_ShowHidden = 0
+    let g:Lf_RecurseSubmodules = 1
     let g:Lf_UseVersionControlTool = 0  "set 1: use .gitignor to filter"
     " let g:Lf_WindowPosition = 'popup'   "open LeaderF with popup window"
     let g:Lf_PreviewInPopup = 0         "set 1: enable preview windeow with popup window"
@@ -559,21 +562,20 @@ endif
     " * configure pettern (file or directory) to define the working directory
     " */
     let g:Lf_RootMarkers = ['.git', '.svn', '.hg', '.project', '.root']
-    let g:Lf_ExternalCommand = 'find "%s" -type f'
+    let g:Lf_DefaultExternalTool = 'find'
 
     if (executable('rg'))
         "/**
         " * rg binary: https://github.com/BurntSushi/ripgrep/releases
         " *     ubuntu: '$ sudo apt-get install ripgrep'
         " */
-        let g:Lf_DefaultExternalTool = 'rg'
 
         "/**
         " * move cursor with C-n, C-p, C-j, or C-k
         " */
 
         "// search word under cursor, the pattern is treated as regex, and enter normal mode directly
-        noremap <Leader>rg :<C-U><C-R>=printf("Leaderf! rg --stayOpen -g !**/tags -g !ID -g !GPATH -g !GRTAGS -g !GTAGS -e %s ", expand("<cword>"))<CR><CR>
+        noremap <Leader>rg :<C-U><C-R>=printf("Leaderf! rg --stayOpen -g !tags -g !TAGS -g !ID -g !GPATH -g !GRTAGS -g !GTAGS -g !*cscope* -e %s ", expand("<cword>"))<CR><CR>
 
         "/* search word under cursor, the pattern is treated as regex,
         " * append the result to previous search results.
