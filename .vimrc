@@ -26,6 +26,7 @@ Plug 'fcamel/gj'
 " Plug 'kien/ctrlp.vim'
 " Plug 'godlygeek/tabular'
 Plug 'vim-scripts/Align'
+Plug 'vim-scripts/AutoComplPop'
 
 
 "// files diff plug-in
@@ -616,6 +617,10 @@ endif
 " }}}1
 
 " ----------- align ------ {{{1
+" }}}1
+
+" ----------- AutoComplPop (acp) ------ {{{1
+let g:acp_enableAtStartUp = 1
 " }}}1
 
 "----------- autoformat ------ {{{1
