@@ -95,8 +95,8 @@ call s:InitVar('g:Lf_HistoryExclude', {
             \})
 if &encoding ==? "utf-8"
     call s:InitVar('g:Lf_StlSeparator', {
-                \ 'left': '->',
-                \ 'right': '<-',
+                \ 'left': '?',
+                \ 'right': '?',
                 \ 'font': ''
                 \})
 else

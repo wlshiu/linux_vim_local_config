@@ -537,6 +537,9 @@ endif
     let g:Lf_PreviewInPopup = 0         "set 1: enable preview windeow with popup window"
     let g:Lf_ReverseOrder = 0
     let g:Lf_CacheDirectory = s:gtag_cachedir
+    let g:Lf_ShowRelativePath = 1
+    let g:Lf_StlSeparator = { 'left': "\u2b80", 'right': "\u2b82" }
+    let g:Lf_SpinSymbols = ['△', '▲', '>', '>', '▽', '▼', '<', '<']
     let g:Lf_PreviewResult = {
             \ 'File': 0,
             \ 'Buffer': 0,
@@ -556,6 +559,7 @@ endif
     " * configure pettern (file or directory) to define the working directory
     " */
     let g:Lf_RootMarkers = ['.git', '.svn', '.hg', '.project', '.root']
+    let g:Lf_ExternalCommand = 'find "%s" -type f'
 
     if (executable('rg'))
         "/**
