@@ -252,13 +252,6 @@ plug-in management
     :help vim-plug
 <
 
--------------- *vimgrep*
-recursive search >
-    :vimgrep /{pattern}/j **/*.c
-    or
-    \g
-<
-
 安裝插件 >
     PlugInstall [name ...] [#threads]
 <
@@ -287,6 +280,12 @@ recursive search >
     PlugSnapshot[!] [output path]
 <
 
+-------------- *vimgrep*
+recursive search >
+    :vimgrep /{pattern}/j **/*.c
+    or
+    \g
+<
 
 -------------- *EasyGrep*
 將在文件中搜索當前光標下的單詞 >
@@ -320,12 +319,28 @@ let g:tagbar_iconchars = ['>', 'v']
 - 表示一個 private
 # 則是表示一個 protected
 
+-------------- *autoformat*
+syntax format
+
+:Autoformat
+
 -------------- *A.vim*
 開啟對應的 header file
 :A      切換到 h file
 :AS     橫向分割開啟 h file
 :AV     縱向分割開啟 h file
 :AT     新tab 開啟 h file
+
+
+-------------- *LeaderF*
+模糊搜尋
+    使用 C-n, C-p, C-j, or C-k移動
+
+    \f      呼叫檔案搜尋介面
+    \ff     呼叫 function搜尋介面
+    \rg     使用 'rg' 搜尋目前 cursor 的 word
+    \ft     使用 'rg' 搜尋目前 cursor 的 word, 並選擇 file type
+    \fb     呼叫 buffer 搜尋介面
 
 
 -------------- *FuzzyFinder*
@@ -407,15 +422,20 @@ ps. 造成有用leader key "\" 的 hotkey 都變慢
 \t + "symbol"
 
 ex.
-    \t=     對齊 =
-    \t,     代表對齊逗號
-    \t|     對齊 |
-    \tsp    對齊空白字元
-    等等
+    \t=     對齊 =       align assignments (don't count logic, like == or !=)
+    \t,     代表對齊逗號   align on commas
+    \t|     對齊 |       align on vertical bars (|)
+    \tsp    對齊空白字元   align on whitespace
+    \tt     align LaTeX tabular tables
+
 
 對齊宣告參數
-\adec
-    一樣用 visual mode 選取想要對齊的區域，輸入 \adec。
+    \acom : align comments
+	\adec : align C declarations (one variable per line)
+	\afnc : align ansi-style C function input arguments
+	\Htd  : align html tables
+
+    一樣用 visual mode 選取想要對齊的區域，輸入 \acom or \adec
 
 
 -------------- *NERD-Commenter*

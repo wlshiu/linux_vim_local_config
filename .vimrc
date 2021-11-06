@@ -24,6 +24,8 @@ Plug 'jeetsukumaran/vim-buffergator'
 Plug 'fcamel/gj'
 " Plug 'Tuxdude/mark.vim'
 " Plug 'kien/ctrlp.vim'
+" Plug 'godlygeek/tabular'
+Plug 'vim-scripts/Align'
 
 
 "// files diff plug-in
@@ -165,6 +167,9 @@ set number
 
 "// no wrap a line
 set nowrap
+
+"// cmd window size
+set cmdheight=2
 
 set splitbelow
 set splitright
@@ -571,7 +576,7 @@ endif
         " noremap <C-G> :<C-U><C-R>=printf("Leaderf! rg --append -e %s ", expand("<cword>"))<CR>
 
         "// search word under cursor in *.h, *.c and *.cpp files.
-        noremap <Leader>a :<C-U><C-R>=printf("Leaderf! rg -e %s -g *.{h,c,cpp,s,S}", expand("<cword>"))<CR>
+        noremap <Leader>ft :<C-U><C-R>=printf("Leaderf! rg -e %s -g *.{h,c,cpp,s,S}", expand("<cword>"))<CR>
 
         "// search word under cursor in cpp files and java files, exclude the *.hpp files
         " noremap <Leader>c :<C-U><C-R>=printf("Leaderf! rg -e %s -t cpp -t java -g !*.hpp", expand("<cword>"))<CR>
@@ -599,6 +604,24 @@ endif
 	highlight Lf_hl_matchRefine  gui=bold guifg=Magenta cterm=bold ctermfg=green
 " }}}1
 
+" ----------- tabular ------ {{{1
+"// align syntax
+    if exists(":Tabularize")
+        "/**
+        " * :'<, '>Tabularize /{pattern}
+        " * ps. {pattern} is '=', '|', '*', ...etc
+        " */
+        noremap <leader>a :<C-U><C-R>=printf("'<, '>Tabularize /%s", "=")<CR>
+    endif
+" }}}1
+
+" ----------- align ------ {{{1
+" }}}1
+
+"----------- autoformat ------ {{{1
+let g:formatdef_my_cpp = '"AStyle -A1 -xv -s -k -xw -w -y -m40 -p -xg -k3 -w3 --convert-tabs -xl -n --lineend=linux"'
+let g:formatters_cpp = ['c']
+" }}}
 
 "======================================================================
 " My functions
