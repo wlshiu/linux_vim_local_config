@@ -219,7 +219,7 @@ if version >= 700
 endif
 
 "// auto fold '{{{' to '}}}'
-set foldmethod=marker
+" set foldmethod=marker
 
 " set tags+=tags
 
