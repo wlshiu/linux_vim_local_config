@@ -98,7 +98,7 @@ endfunction
 function! s:Normalize(filename)
     if has("nvim") && (has('win32') || has('win64'))
         if &shellslash
-            return tr(a:filename, '\', '/')
+            return tr(a:filename, '\', '//')
         else
             return tr(a:filename, '/', '\')
         endif
