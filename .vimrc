@@ -25,6 +25,7 @@ Plug 'fcamel/gj'
 " Plug 'Tuxdude/mark.vim'
 " Plug 'kien/ctrlp.vim'
 " Plug 'godlygeek/tabular'
+" Plug 'jremmen/vim-ripgrep'
 Plug 'vim-scripts/Align'
 Plug 'vim-scripts/AutoComplPop'
 
@@ -491,6 +492,22 @@ endif
     let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 " }}}1
 
+" ----------- vim-ripgrep ------ {{{1
+    let g:rg_binary = 'rg'
+    let g:rg_highlight = 1
+    let g:rg_derive_root = 1
+
+    " /**
+    "  * user 'rg --type-list' to list support type
+    "  */
+    let g:rg_command = g:rg_binary . ' -p -Thtml -g !tags -g !ID -g !GPATH -g !GRTAGS -g !GTAGS -g !*cscope* -g !.git --vimgrep'
+
+    " /**
+    "  * If LeaderF rg search fail, use this plug-in
+    "  */
+    " noremap <leader>rg :Rg <cword><CR>
+
+" }}}1
 
 " ----------- LeaderF ------ {{{1
 	" noremap <C-R> :LeaderfMruCwd<CR>
