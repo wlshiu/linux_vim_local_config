@@ -57,7 +57,7 @@ set ffs=unix
 set t_Co=256
 set encoding=utf-8
 "set fileencodings=utf-8,cp950
-set fileencodings=utf-8,ucs-bom,gb2312,gbk,gb18030,cp936
+set fileencodings=utf-8,cp950ucs-bom,gb2312,gbk,gb18030,cp936
 set fileencoding=utf-8
 set termencoding=utf-8
 
@@ -757,4 +757,17 @@ function! AddTitle()
 endfunction
 " }}}1
 
+"-----------------
+" Disable/Enable cursor line/column {{{1
+" ps. user should call twice in both diff windows
+function Do_EnableCursorBG()
+    set cursorline
+    set cursorcolumn
+endfunction
 
+function Do_DisableCursorBG()
+    set nocursorline
+    set nocursorcolumn
+endfunction
+nmap <leader>lb <Esc>:call Do_DisableCursorBG() <CR>
+" }}}1
