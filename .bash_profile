@@ -51,4 +51,8 @@ alias diff='diff --color -u'
 
 set completion-ignore-case on
 
+CROSS_COMPILE=arm-none-eabi-
+ARCH=arm
+export ARCH CROSS_COMPILE
+
 export NCURSES_NO_UTF8_ACS=1
