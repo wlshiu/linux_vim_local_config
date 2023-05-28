@@ -30,6 +30,8 @@ Plug 'vim-scripts/Align'
 Plug 'vim-scripts/AutoComplPop'
 
 
+Plug 'lazywei/vim-doc-tw'
+
 "// files diff plug-in
 " Plug 'rickhowe/spotdiff.vim'
 " Plug 'AndrewRadev/linediff.vim'
