@@ -19,6 +19,8 @@ SHELL CMD                                   *shell-cmd*
 
 :ls             顯示當前buffer的情況
 
+:e <file path>  在 vim 中, 開啟檔案 (若不存在, 會新增檔案)
+
 :cd ..          進入父目錄
 
 :args           顯示目前打開的文件
@@ -41,15 +43,24 @@ SHELL CMD                                   *shell-cmd*
 
 $ fg            go back to vim in console
 
-:%s/\r//g       取代字尾 ^M 字符 >
+搜尋及取代 >
+
+    :%s/search_from/replace_to/g        搜尋字串並取代
+
+    :%s/search_from/replace_to/gc       在取代前, 逐一確認是否取代 (加一個 'c')
+    replace with qqqqqq (y/n/a/q/l/^E/^Y)?
+
+    :%s/search_from/replace_to/gi       搜尋字串並取代時, 略過大小寫的差異 (加一個 'i')
+
+    :10,50s/search_from/replace_to/g    取代指定行數範圍的字串, 例如要取代 10 ~ 50 行的字串
+
+    :%s/\r//g           取代字尾 ^M 字符
     nmap \dm <Esc>:%s/\r//g <CR>
-<
 
-:%s/\s\+$//g    刪除字尾空白 >
+    :%s/\s\+$//g        刪除字尾空白
     nmap \de <Esc>:%s/\s\+$//g <CR>
-<
 
-replace pre-existing tabs >
+    :retab             用空白取代 tab
     nmap \rt <Esc>:retab <CR>
 <
 
@@ -109,7 +120,7 @@ HOTKEY                                       *hotkey*
 -------------- *區塊註解*
 於控制選項(ESC下), 游標移動至要註解的開頭第一個字
 按Ctrl-V, 接著往下選取要註解的區塊
-按大寫I插入. 插入註解符號(如』, //, #)
+按大寫I插入. 插入註解符號(如’, //, #)
 最後, 按Esc, 返回控制選項
 ps. windows環境下, 需先取消預設 hotkey ctrl-v = 貼上 (unmap <C-V> in _vimrc)
 
@@ -157,6 +168,11 @@ On Windows with Gvim
 
 ==============================================================================
 PLUG-IN                                      *plug-in*
+
+-------------- *hex view*
+toggle between hex and text >
+    :hexmode
+<
 
 -------------- *ctags/cscope*
 :!ctags -R
@@ -431,9 +447,9 @@ ex.
 
 對齊宣告參數
     \acom : align comments
-	\adec : align C declarations (one variable per line)
-	\afnc : align ansi-style C function input arguments
-	\Htd  : align html tables
+    \adec : align C declarations (one variable per line)
+    \afnc : align ansi-style C function input arguments
+    \Htd  : align html tables
 
     一樣用 visual mode 選取想要對齊的區域，輸入 \acom or \adec
 
@@ -535,8 +551,8 @@ I set <leader> to ','
 <leader>st      until do done
 <leader>sw      while do done
 <leader>sfu     function
-<leader>se      echo ­e 「\n」
-<leader>sp      printf 「\n」
+<leader>se      echo ­e "\n"
+<leader>sp      printf "\n"
 <leader>hh      syntax help
 
 -------------- *DrawIt*
@@ -578,6 +594,29 @@ Supported Features
    \ra ... \rz  replace text with given brush/register
    \pa ...      like \ra ... \rz, except that blanks are considered
                 to be transparent
+
+-------------- *DirDiff*
+比較兩個資料夾的差異 >
+    :DirDiff folder1 folder2
+<
+
+reflash 兩個資料夾的差異 >
+    :DirDiffUpdate
+<
+
+<leader>dg -    Diff get: maps to :diffget<CR>
+<leader>dp -    Diff put: maps to :diffput<CR>
+<leader>dj -    Diff next: (think j for down)
+<leader>dk -    Diff previous: (think k for up)
+
+
+-------------- *autoformat*
+sytax format the current file >
+    :Autoformat
+<
+
+<leader>a + <sync_word> -       e.g. <leader>a=, align '='
+                                     <leader>a:, align ':'
 
 ==============================================================================
 MISC                                         *misc*
