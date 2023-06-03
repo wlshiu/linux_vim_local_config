@@ -64,6 +64,16 @@ $ fg            go back to vim in console
     nmap \rt <Esc>:retab <CR>
 <
 
+在 vim 中呼叫 terminal >
+    :term (Added in Vim 8.1)
+
+    切換視窗: Ctrl + w + jk
+
+    關閉視窗: Ctrl + w + c
+
+    tnoremap <ESC> <C-w>:q!<CR>     exit terminal mode (似乎有 bug, terminal 會異常)
+<
+
 when press \ + Enter, the cursor break context to next line. >
     nmap \<CR>  i<CR><ESC>
 <

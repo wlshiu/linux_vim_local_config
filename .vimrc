@@ -59,7 +59,7 @@ set ffs=unix
 set t_Co=256
 set encoding=utf-8
 "set fileencodings=utf-8,cp950
-set fileencodings=utf-8,cp950ucs-bom,gb2312,gbk,gb18030,cp936
+set fileencodings=utf-8,cp950,ucs-bom,gb2312,gbk,gb18030,cp936
 set fileencoding=utf-8
 set termencoding=utf-8
 
@@ -318,7 +318,7 @@ endif
     let g:tagbar_autoshowtag = 1
     let g:tagbar_autoopen = 1
     " let g:tagbar_ctags_bin='/usr/bin/ctags-exuberant'
-    let g:tagbar_ctags_bin='/usr/bin/ctags'
+    " let g:tagbar_ctags_bin='/usr/bin/ctags'
     "// hot key
     nmap tl :TagbarToggle<CR>
 " }}}1
@@ -512,19 +512,19 @@ endif
 " }}}1
 
 " ----------- LeaderF ------ {{{1
-	" noremap <C-R> :LeaderfMruCwd<CR>
+    " noremap <C-R> :LeaderfMruCwd<CR>
 
     "/**
     " * enter functions (in the current buffer) search mode
     " * ps. move cursor with C-j, or C-k
     " */
-	noremap <leader>fs :LeaderfFunctionAll<CR>
+    noremap <leader>fs :LeaderfFunctionAll<CR>
 
     "/**
     " * enter files search mode
     " * ps. move cursor with C-j, or C-k
     " */
-	noremap <leader>f :LeaderfFile<CR>
+    noremap <leader>f :LeaderfFile<CR>
 
     "/**
     " * enter files search mode, search opened files in history list
@@ -543,8 +543,8 @@ endif
                 \ 'file': ['tags','TAGS','ID','GPATH','GRTAGS','GTAGS','cscope*','*.md','*.swp','~$*','*.bak','*.exe','*.o','*.so','*.py[co]','*.d','*.elf','*.i']
                 \}
 
-	let g:Lf_GtagsAutoGenerate = 1
-	let g:Lf_Gtagslabel = 'native-pygments'
+    let g:Lf_GtagsAutoGenerate = 1
+    let g:Lf_Gtagslabel = 'native-pygments'
     let s:gtag_cachedir = expand('~/.cache/gtags')
     "// mkdir ~/.cache/gtags if it does not exist
     if !isdirectory(s:gtag_cachedir)
@@ -593,7 +593,10 @@ endif
         " * move cursor with C-n, C-p, C-j, or C-k
         " */
 
-        "// search word under cursor, the pattern is treated as regex, and enter normal mode directly
+        "/**
+        " * search word under cursor, the pattern is treated as regex, and enter normal mode directly
+        " * ps. if on windows, mark this hot key, and unmark ~/.vim\plugin\vim-ripgrep.vim @ 'map <leader>rg :Rg<CR>'
+        " */
         noremap <Leader>rg :<C-U><C-R>=printf("Leaderf! rg --stayOpen -g !tags -g !TAGS -g !ID -g !GPATH -g !GRTAGS -g !GTAGS -g !*cscope* -e %s ", expand("<cword>"))<CR><CR>
 
         "/* search word under cursor, the pattern is treated as regex,
@@ -620,14 +623,14 @@ endif
     endif
 
 
-	highlight Lf_hl_rgHighlight guifg=#000000 guibg=#CCCC66 ctermfg=0 ctermbg=185
-	highlight Lf_hl_match gui=bold guifg=Blue cterm=bold ctermfg=green
-	highlight Lf_hl_match0 gui=bold guifg=Blue cterm=bold ctermfg=green
-	highlight Lf_hl_match1 gui=bold guifg=Blue cterm=bold ctermfg=green
-	highlight Lf_hl_match2 gui=bold guifg=Blue cterm=bold ctermfg=green
-	highlight Lf_hl_match3 gui=bold guifg=Blue cterm=bold ctermfg=green
-	highlight Lf_hl_match4 gui=bold guifg=Blue cterm=bold ctermfg=green
-	highlight Lf_hl_matchRefine  gui=bold guifg=Magenta cterm=bold ctermfg=green
+    highlight Lf_hl_rgHighlight guifg=#000000 guibg=#CCCC66 ctermfg=0 ctermbg=185
+    highlight Lf_hl_match gui=bold guifg=Blue cterm=bold ctermfg=green
+    highlight Lf_hl_match0 gui=bold guifg=Blue cterm=bold ctermfg=green
+    highlight Lf_hl_match1 gui=bold guifg=Blue cterm=bold ctermfg=green
+    highlight Lf_hl_match2 gui=bold guifg=Blue cterm=bold ctermfg=green
+    highlight Lf_hl_match3 gui=bold guifg=Blue cterm=bold ctermfg=green
+    highlight Lf_hl_match4 gui=bold guifg=Blue cterm=bold ctermfg=green
+    highlight Lf_hl_matchRefine  gui=bold guifg=Magenta cterm=bold ctermfg=green
 " }}}1
 
 " ----------- tabular ------ {{{1
@@ -667,6 +670,7 @@ let g:autopep8_indent_size = 4
 
 autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
 " }}}
+
 
 "======================================================================
 " My functions
@@ -784,3 +788,31 @@ function Do_DisableCursorBG()
 endfunction
 nmap <leader>lb <Esc>:call Do_DisableCursorBG() <CR>
 " }}}1
+
+"-----------------
+" RunPython(), Run current file with python and quickfix {{{1
+
+" run current file with python
+func! Do_Python()
+    exec "w"
+    if &filetype == 'python'
+        exec "!time python %"
+    endif
+endfunc
+
+function Do_PythonQwin()
+    let mp = &makeprg
+    let ef = &errorformat
+    let exeFile = expand("%:t")
+    setlocal makeprg=python\ -u
+    set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+    silent make %
+    copen       " call quickfix, it will make standard I/O fail"
+    let &makeprg = mp
+    let &errorformat = ef
+endfunction
+
+" map <F5> :Autopep8<CR> :w<CR> :call RunPython()<CR>
+" map <F5> :w<CR> :call Do_Python()<CR>
+" }}}1
+
