@@ -28,7 +28,7 @@ Plug 'fcamel/gj'
 " Plug 'jremmen/vim-ripgrep'
 Plug 'vim-scripts/Align'
 Plug 'vim-scripts/AutoComplPop'
-
+Plug 'tell-k/vim-autopep8'
 
 Plug 'lazywei/vim-doc-tw'
 
@@ -655,6 +655,17 @@ let g:formatters_cpp = ['c']
 
 "----------- markdown ------ {{{1
 let g:vim_markdown_conceal = 0
+" }}}
+
+"----------- vim-autopep8 ------ {{{1
+" pip install autopep8 (external python module)
+
+let g:autopep8_pep8_passes = 150
+
+let g:autopep8_max_line_length = 100
+let g:autopep8_indent_size = 4
+
+autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
 " }}}
 
 "======================================================================
