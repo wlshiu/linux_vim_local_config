@@ -192,7 +192,7 @@
 alias ls='ls --color'
 alias vi='vim'
 alias grep='grep --color=auto'
-
+alias find='find -L'
 
 export PATH="$PATH:$HOME/.vim/bin"
 
