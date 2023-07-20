@@ -671,6 +671,16 @@ let g:autopep8_indent_size = 4
 autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
 " }}}
 
+"----------- DoxygenToolkit ------ {{{1
+" let g:DoxygenToolkit_blockHeader="================================"
+" let g:DoxygenToolkit_blockFooter="================================"
+let g:DoxygenToolkit_authorName = "Wei-Lun Hsu"
+" let g:DoxygenToolkit_licenseTag="@license    GPL 2.0"
+let g:DoxygenToolkit_commentType = "C"
+let g:DoxygenToolkit_briefTag_funcName = "yes"
+let g:doxygen_enhanced_color = 1
+" }}}
+
 
 "======================================================================
 " My functions

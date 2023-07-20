@@ -628,6 +628,15 @@ sytax format the current file >
 <leader>a + <sync_word> -       e.g. <leader>a=, align '='
                                      <leader>a:, align ':'
 
+-------------- *DoxygenToolkit*
+doxy function >
+    :Dox
+<
+
+doxy file >
+    :DoxLic
+<
+
 ==============================================================================
 MISC                                         *misc*
 
