@@ -29,6 +29,7 @@ Plug 'fcamel/gj'
 Plug 'vim-scripts/Align'
 Plug 'vim-scripts/AutoComplPop'
 Plug 'tell-k/vim-autopep8'
+Plug 'henry-hsieh/riscv-asm-vim'
 
 Plug 'lazywei/vim-doc-tw'
 
@@ -319,6 +320,105 @@ endif
     let g:tagbar_autoopen = 1
     " let g:tagbar_ctags_bin='/usr/bin/ctags-exuberant'
     " let g:tagbar_ctags_bin='/usr/bin/ctags'
+
+    let g:tagbar_type_armasm = {
+        \ 'ctagsbin'  : 'ctags',
+        \ 'ctagsargs' : '-f- --format=2 --excmd=pattern --fields=nksSa --extra= --sort=no --language-force=asm',
+        \ 'kinds' : [
+            \ 'm:macros:0:1',
+            \ 't:types:0:1',
+            \ 'd:defines:0:1',
+            \ 'l:labels:0:1'
+        \ ]
+        \}
+
+    let g:tagbar_type_make = {
+            \ 'kinds':[
+            \ 'm:macros',
+            \ 't:targets'
+        \ ]
+        \}
+
+    let g:tagbar_type_riscv_asm = {
+        \ 'ctagsbin'  : 'ctags',
+        \ 'ctagsargs' : '-f- --format=2 --excmd=pattern --fields=nksSa --extra= --sort=no --language-force=asm',
+        \ 'kinds' : [
+            \ 'm:macros:0:1',
+            \ 't:types:0:1',
+            \ 'd:defines:0:1',
+            \ 'l:labels:0:1'
+        \ ]
+        \}
+
+    let g:tagbar_type_systemverilog = {
+        \ 'ctagstype': 'systemverilog',
+        \ 'kinds' : [
+            \'A:assertions',
+             \'C:classes',
+             \'E:enumerators',
+             \'I:interfaces',
+             \'K:packages',
+             \'M:modports',
+             \'P:programs',
+             \'Q:prototypes',
+             \'R:properties',
+             \'S:structs and unions',
+             \'T:type declarations',
+             \'V:covergroups',
+             \'b:blocks',
+             \'c:constants',
+             \'e:events',
+             \'f:functions',
+             \'m:modules',
+             \'n:net data types',
+             \'p:ports',
+             \'r:register data types',
+             \'t:tasks',
+        \],
+        \ 'sro': '.',
+        \ 'kind2scope' : {
+            \ 'K' : 'package',
+            \ 'C' : 'class',
+            \ 'm' : 'module',
+            \ 'P' : 'program',
+            \ 'I' : 'interface',
+            \ 'M' : 'modport',
+            \ 'f' : 'function',
+            \ 't' : 'task',
+        \},
+        \ 'scope2kind' : {
+                \ 'package'   : 'K',
+            \ 'class'     : 'C',
+            \ 'module'    : 'm',
+            \ 'program'   : 'P',
+            \ 'interface' : 'I',
+            \ 'modport'   : 'M',
+            \ 'function'  : 'f',
+            \ 'task'      : 't',
+        \ },
+        \}
+
+    let g:tagbar_type_vhdl = {
+        \ 'ctagstype': 'vhdl',
+        \ 'kinds' : [
+            \'d:prototypes',
+            \'b:package bodies',
+            \'e:entities',
+            \'a:architectures',
+            \'t:types',
+            \'p:processes',
+            \'f:functions',
+            \'r:procedures',
+            \'c:constants',
+            \'T:subtypes',
+            \'r:records',
+            \'C:components',
+            \'P:packages',
+            \'l:locals'
+        \ ]
+        \}
+
+
     "// hot key
     nmap tl :TagbarToggle<CR>
 " }}}1
@@ -681,6 +781,10 @@ let g:DoxygenToolkit_briefTag_funcName = "yes"
 let g:doxygen_enhanced_color = 1
 " }}}
 
+"----------- riscv-asm-vim ------ {{{1
+let g:riscv_asm_isa = "rv32gc"
+" add '// vim: ft=riscv_asm' to the end of asm file of RISC-V
+" }}}
 
 "======================================================================
 " My functions
