@@ -48,6 +48,7 @@ alias ls='ls --color'
 alias vi='vim'
 alias grep='grep --color=auto'
 alias diff='diff --color -u'
+alias tmux='tmux -2'  # force tmux support 256 colours
 
 set completion-ignore-case on
 
