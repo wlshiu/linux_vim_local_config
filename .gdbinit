@@ -121,19 +121,19 @@ end
 
 # __________________macros_________________
 
-define arm
+define z_arm
   set $ARM = 1
   set $64BITS = 0
 end
-document arm
+document z_arm
 Set gdb to work with ARM binaries.
 end
 
-define rv32
+define z_rv32
   set $RV32 = 1
   set $64BITS = 0
 end
-document arm
+document z_rv32
 Set gdb to work with RISC-V 32-bits binaries.
 end
 

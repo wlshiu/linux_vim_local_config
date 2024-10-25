@@ -120,7 +120,7 @@ Syntax: hexdump ADDR <NR_LINES> <Is_Byte_Layout>
 | Optional parameter is the number of lines to display if you want more than one.
 end
 
-define memdump
+define z_memdump
     if $argc == 1
         hexdump $arg0
     else
@@ -130,13 +130,13 @@ define memdump
             if $argc == 3
                 hexdump $arg0 $arg1 $arg2
             else
-                help memdump
+                help z_memdump
             end
         end
     end
 end
-document memdump
-Syntax: memdump ADDR <NR_LINES> <Is_Byte_Layout>
+document z_memdump
+Syntax: z_memdump ADDR <NR_LINES> <Is_Byte_Layout>
 | Display a 16-byte hex/ASCII dump of memory starting at address ADDR.
 | Optional parameter is the number of lines to display if you want more than one.
 end
