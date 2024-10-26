@@ -69,35 +69,35 @@ set $COLOR_REGVAL_MODIFIED = $RED
 define color
     # BLACK
     if $arg0 == 0
-        echo \033[30m
+        echo \033[0;30m
     else
         # RED
         if $arg0 == 1
-            echo \033[31m
+            echo \033[0;31m
         else
             # GREEN
             if $arg0 == 2
-                echo \033[32m
+                echo \033[0;32m
             else
                 # YELLOW
                 if $arg0 == 3
-                    echo \033[33m
+                    echo \033[0;33m
                 else
                     # BLUE
                     if $arg0 == 4
-                        echo \033[34m
+                        echo \033[0;34m
                     else
                         # MAGENTA
                         if $arg0 == 5
-                            echo \033[35m
+                            echo \033[0;35m
                         else
                             # CYAN
                             if $arg0 == 6
-                                echo \033[36m
+                                echo \033[0;36m
                             else
                                 # WHITE
                                 if $arg0 == 7
-                                    echo \033[37m
+                                    echo \033[0;37m
                                 end
                             end
                         end
@@ -109,47 +109,63 @@ define color
 end
 
 define color_reset
-    echo \033[0m
+    echo \033[0;0m
 end
 
 define color_bold
-    echo \033[1m
+    echo \033[0;1m
    #echo \[\e[1m\]
 end
 
 define color_underline
-    echo \033[4m
+    echo \033[0;4m
 end
 
 # __________________macros_________________
 
 define z_arm
-  set $ARM = 1
-  set $64BITS = 0
+    set $64BITS = 0
+
+    set $ARM = 1
+    set $RV32 = 0
+    set $RV32_N1xx = 0
+    set $RV32_N2xx = 0
 end
 document z_arm
 Set gdb to work with ARM binaries.
 end
 
 define z_rv32
-  set $RV32 = 1
-  set $64BITS = 0
+    set $64BITS = 0
+
+    set $ARM = 0
+    set $RV32 = 1
+    set $RV32_N1xx = 0
+    set $RV32_N2xx = 0
 end
 document z_rv32
 Set gdb to work with RISC-V 32-bits binaries.
 end
 
 define z_rv32_n1xx
-  set $RV32_N1xx = 1
-  set $64BITS = 0
+    set $64BITS = 0
+
+    set $ARM = 0
+    set $RV32 = 0
+    set $RV32_N1xx = 1
+    set $RV32_N2xx = 0
 end
 document z_rv32_n1xx
 Set gdb to work with RISC-V Nuclei N1xx.
 end
 
 define z_rv32_n2xx
-  set $RV32_N2xx = 1
-  set $64BITS = 0
+    set $64BITS = 0
+
+    set $ARM = 0
+    set $RV32 = 0
+    set $RV32_N1xx = 0
+    set $RV32_N2xx = 1
 end
 document z_rv32_n2xx
 Set gdb to work with RISC-V Nuclei N2xx.

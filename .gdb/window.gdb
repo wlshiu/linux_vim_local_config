@@ -44,3 +44,42 @@ end
 document cls
 Clear screen.
 end
+
+
+define z_win_src_high
+
+    if $argc == 1
+        winheight src $arg0 5
+    else
+        if $argc == 2
+            winheight src $arg0 $arg1
+        else
+            help z_win_src_high
+        end
+    end
+    
+end
+document z_win_src_high
+Syntax: z_win_src_high <+/-> [NR_LINES]
+| Size the active window high
+end
+
+
+define z_win_cmd_high
+
+    if $argc == 1
+        winheight cmd $arg0 5
+    else
+        if $argc == 2
+            winheight cmd $arg0 $arg1
+        else
+            help z_win_cmd_high
+        end
+    end
+    
+end
+document z_win_cmd_high
+Syntax: z_win_src_high <+/-> [NR_LINES]
+| Size the active window high
+end
+

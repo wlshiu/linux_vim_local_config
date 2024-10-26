@@ -14,7 +14,7 @@ define ascii_char
     end
 end
 document ascii_char
-Syntax: ascii_char ADDR
+Syntax: ascii_char <ADDR>
 | Print ASCII value of byte at address ADDR.
 | Print "." if the value is unprintable.
 end
@@ -32,7 +32,7 @@ define hex_quad
     end
 end
 document hex_quad
-Syntax: hex_quad ADDR
+Syntax: hex_quad <ADDR>
 | Print eight hexadecimal bytes starting at address ADDR.
 end
 
@@ -72,7 +72,7 @@ define hexdump_aux
     end
 end
 document hexdump_aux
-Syntax: hexdump_aux ADDR
+Syntax: hexdump_aux <ADDR>
 | Display a 16-byte hex/ASCII dump of memory at address ADDR.
 end
 
@@ -115,7 +115,7 @@ define hexdump
     printf "\n"
 end
 document hexdump
-Syntax: hexdump ADDR <NR_LINES> <Is_Byte_Layout>
+Syntax: hexdump <ADDR> [NR_LINES] [Is_Byte_Layout]
 | Display a 16-byte hex/ASCII dump of memory starting at address ADDR.
 | Optional parameter is the number of lines to display if you want more than one.
 end
@@ -136,7 +136,7 @@ define z_memdump
     end
 end
 document z_memdump
-Syntax: z_memdump ADDR <NR_LINES> <Is_Byte_Layout>
+Syntax: z_memdump <ADDR> [NR_LINES] [Is_Byte_Layout]
 | Display a 16-byte hex/ASCII dump of memory starting at address ADDR.
 | Optional parameter is the number of lines to display if you want more than one.
 end
