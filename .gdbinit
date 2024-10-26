@@ -2,6 +2,8 @@
 # __________________global variables_________________
 set $ARM = 0
 set $RV32 = 0
+set $RV32_N1xx = 0
+set $RV32_N2xx = 0
 
 set $SHOW_CONTEXT = 0
 set $SHOW_NEST_INSN = 0
@@ -136,6 +138,23 @@ end
 document z_rv32
 Set gdb to work with RISC-V 32-bits binaries.
 end
+
+define z_rv32_n1xx
+  set $RV32_N1xx = 1
+  set $64BITS = 0
+end
+document z_rv32_n1xx
+Set gdb to work with RISC-V Nuclei N1xx.
+end
+
+define z_rv32_n2xx
+  set $RV32_N2xx = 1
+  set $64BITS = 0
+end
+document z_rv32_n2xx
+Set gdb to work with RISC-V Nuclei N2xx.
+end
+
 
 source ~/.gdb/cpu.gdb
 source ~/.gdb/data.gdb
