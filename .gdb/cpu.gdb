@@ -121,3 +121,16 @@ Syntax: z_csr_mcause
 end
 
 
+define z_csr_mtimer
+
+    if ($RV32_N1xx == 1)
+        reg_rv32N1_mtimer
+    else
+        printf "\nNot Support\n"
+    end
+
+end
+document z_csr_mtimer
+Syntax: z_csr_mtimer
+| Auxiliary function to display mtimer of RV32
+end

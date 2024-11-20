@@ -107,4 +107,17 @@ Syntax: reg_rv32N1_mcause
 end
 
 
+define reg_rv32N1_mtimer
 
+    printf "\n"
+    printf "msip: x%X, mstop: x%X\n", \
+        (($msip) & 0x1), ($mstop & 0x1)
+    printf "mtimecmp= x%X, mtime= x%X\n", \
+        ($mtimecmp & 0xFFFFFF), $mtime
+
+
+end
+document reg_rv32N1_mtime
+Syntax: reg_rv32N1_mtimer
+| Auxiliary function to display mtimer of Nuclei N1xx
+end

@@ -40,17 +40,18 @@ define hexdump_aux
     if $argc != 1
         help hexdump_aux
     else
-        color_bold
+        # color_bold
         printf "0x%08X : ", $arg0
-        color_reset
+        # color_reset
 
         hex_quad $arg0
-        color_bold
+        # color_bold
         printf " - "
-        color_reset
+        # color_reset
         hex_quad $arg0+8
         printf " "
-        color_bold
+
+        # color_bold
         ascii_char $arg0+0x0
         ascii_char $arg0+0x1
         ascii_char $arg0+0x2
@@ -67,7 +68,7 @@ define hexdump_aux
         ascii_char $arg0+0xD
         ascii_char $arg0+0xE
         ascii_char $arg0+0xF
-        color_reset
+        # color_reset
         printf "\n"
     end
 end
@@ -77,7 +78,7 @@ Syntax: hexdump_aux <ADDR>
 end
 
 define hexdump
-    printf "\n"
+    printf "\n===== mem dump ====\n"
 
     if $argc == 1
         hexdump_aux $arg0
@@ -95,9 +96,9 @@ define hexdump
                 while ($_count < $arg1)
                     set $_i = ($_count * 0x10)
 
-                    color_bold
+                    # color_bold
                     printf "0x%08X: ", $arg0+$_i
-                    color_reset
+                    # color_reset
 
                     printf "%08X %08X %08X %08X\n", \
                             *(unsigned int*)($arg0+$_i+0x0), \
