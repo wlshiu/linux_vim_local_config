@@ -141,3 +141,39 @@ Syntax: z_memdump <ADDR> [NR_LINES] [Is_Byte_Layout]
 | Display a 16-byte hex/ASCII dump of memory starting at address ADDR.
 | Optional parameter is the number of lines to display if you want more than one.
 end
+
+define z_memwrite32
+    if $argc == 2
+        set *(unsigned int*)($arg0) = $arg1 & 0xFFFFFFFF
+    else
+        help z_memwrite32
+    end
+end
+document z_memwrite32
+Syntax: z_memwrite32 <ADDR> <32-bits value>
+| Write 32-bits value to the target memory address
+end
+
+define z_memwrite16
+    if $argc == 2
+        set *(unsigned short*)($arg0) = $arg1 & 0xFFFF
+    else
+        help z_memwrite16
+    end
+end
+document z_memwrite16
+Syntax: z_memwrite16 <ADDR> <16-bits value>
+| Write 16-bits value to the target memory address
+end
+
+define z_memwrite8
+    if $argc == 2
+        set *(unsigned char*)($arg0) = $arg1 & 0xFF
+    else
+        help z_memwrite8
+    end
+end
+document z_memwrite8
+Syntax: z_memwrite8 <ADDR> <8-bits value>
+| Write 8-bits value to the target memory address
+end
