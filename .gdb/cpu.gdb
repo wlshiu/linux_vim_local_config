@@ -126,7 +126,11 @@ define z_csr_mtimer
     if ($RV32_N1xx == 1)
         reg_rv32N1_mtimer
     else
-        printf "\nNot Support\n"
+        if ($RV32_N2xx == 1)
+            reg_rv32N2_systimer
+        else
+            printf "\nNot Support\n"
+        end
     end
 
 end
