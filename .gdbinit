@@ -12,6 +12,8 @@ set $CONTEXTSIZE_STACK = 6
 set $CONTEXTSIZE_DATA  = 8
 set $CONTEXTSIZE_CODE  = 8
 
+set $SOC_NAME = 0
+
 
 
 
@@ -35,12 +37,20 @@ set style address intensity bold
 # show style tui-current-position
 
 
+set logging enabled on
+# set logging enabled off
+
+set logging overwrite on
+# set logging file ~/gdb.log
+
 ## configure some print formats
 set print pretty on
 set print array on
 
 
 set prompt \033[0;33mgdb>>> \033[0m
+
+winheight cmd 25
 
 # aliases
 alias -- it = info threads
@@ -171,6 +181,36 @@ document z_rv32_n2xx
 Set gdb to work with RISC-V Nuclei N2xx.
 end
 
+define z_soc_pb5700
+    set $64BITS = 0
+
+    set $ARM = 0
+    set $RV32 = 0
+    set $RV32_N1xx = 0
+    set $RV32_N2xx = 1
+
+    source ~/.gdb/peri_regs_pb5700.gdb
+end
+document z_soc_pb5700
+Syntax: z_soc_pb5700
+| Set pb5700 as the target SOC name for peripheral.
+end
+
+
+define z_soc_pa3730
+    set $64BITS = 0
+
+    set $ARM = 0
+    set $RV32 = 0
+    set $RV32_N1xx = 1
+    set $RV32_N2xx = 0
+
+    source ~/.gdb/peri_regs_pa3730.gdb
+end
+document z_soc_pa3730
+Syntax: z_soc_pa3730
+| Set pa3730 as the target SOC name for peripheral.
+end
 
 source ~/.gdb/cpu.gdb
 source ~/.gdb/data.gdb

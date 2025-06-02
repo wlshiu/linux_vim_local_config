@@ -57,7 +57,7 @@ define z_win_src_high
             help z_win_src_high
         end
     end
-    
+
 end
 document z_win_src_high
 Syntax: z_win_src_high <+/-> [NR_LINES]
@@ -76,10 +76,9 @@ define z_win_cmd_high
             help z_win_cmd_high
         end
     end
-    
+
 end
 document z_win_cmd_high
 Syntax: z_win_src_high <+/-> [NR_LINES]
 | Size the active window high
 end
-

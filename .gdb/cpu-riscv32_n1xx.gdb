@@ -14,22 +14,22 @@ define reg_rv32N1_gpr16
     printf "\n"
 
     # pc
-	printf "pc = x%08X\n", $pc
+    printf "pc = x%08X\n", $pc
 
-	# ra, sp, gp, tp
-	printf "ra (x1 ) = x%08X, sp (x2 ) = x%08X, gp (x3 ) = x%08X, tp (x4 ) = x%08X\n", $ra, $sp, $gp, $tp
+    # ra, sp, gp, tp
+    printf "ra (x1 ) = x%08X, sp (x2 ) = x%08X, gp (x3 ) = x%08X, tp (x4 ) = x%08X\n", $ra, $sp, $gp, $tp
 
-	#-------func_argv----------
-	# a1 ~ a3
-	printf "a0 (x10) = x%08X, a1 (x11) = x%08X, a2 (x12) = x%08X, a3 (x13) = x%08X\n", $a0, $a1, $a2, $a3
+    #-------func_argv----------
+    # a1 ~ a3
+    printf "a0 (x10) = x%08X, a1 (x11) = x%08X, a2 (x12) = x%08X, a3 (x13) = x%08X\n", $a0, $a1, $a2, $a3
 
-	# a4 ~ a5
-	printf "a4 (x14) = x%08X, a5 (x15) = x%08X\n", $a4, $a5
+    # a4 ~ a5
+    printf "a4 (x14) = x%08X, a5 (x15) = x%08X\n", $a4, $a5
 
-	# s0 ~ s1
-	printf "s0 (x8 ) = x%08X, s1 (x9 ) = x%08X\n", $s0, $s1
-	# t0 ~ t2
-	printf "t0 (x5 ) = x%08X, t1 (x6 ) = x%08X\n, t2 (x7 ) = x%08X", $t0, $t1, $t2
+    # s0 ~ s1
+    printf "s0 (x8 ) = x%08X, s1 (x9 ) = x%08X\n", $s0, $s1
+    # t0 ~ t2
+    printf "t0 (x5 ) = x%08X, t1 (x6 ) = x%08X\n, t2 (x7 ) = x%08X", $t0, $t1, $t2
 
 end
 document reg_rv32N1_gpr16
@@ -42,10 +42,10 @@ define reg_rv32N1_csrs
     printf "\n"
 
     # verctor basea
-	printf "mtvec= x%08X, mtvt= x%08X\n", $mtvec, $mtvt
+    printf "mtvec= x%08X, mtvt= x%08X\n", $mtvec, $mtvt
 
-	# trap: mcause, mepc, mstatus
-	printf "mcause= x%08X, mepc= x%08X, mstatus= x%08X\n", $mcause, $mepc, $mstatus
+    # trap: mcause, mepc, mstatus
+    printf "mcause= x%08X, mepc= x%08X, mstatus= x%08X\n", $mcause, $mepc, $mstatus
 
 
 
@@ -60,13 +60,13 @@ define reg_rv32N1_core_uid
     printf "\n"
 
     # mvendorid
-	printf "Vendor ID       = x%08X\n", $mvendorid
+    printf "Vendor ID       = x%08X\n", $mvendorid
 
-	# marchid
-	printf "Architecture ID = x%08X\n", $marchid
+    # marchid
+    printf "Architecture ID = x%08X\n", $marchid
 
-	# mimpid
-	printf "Implementation ID = x%08X\n", $mimpid
+    # mimpid
+    printf "Implementation ID = x%08X\n", $mimpid
 
 
 

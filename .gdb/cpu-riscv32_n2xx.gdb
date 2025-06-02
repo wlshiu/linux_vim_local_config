@@ -109,6 +109,23 @@ Syntax: reg_rv32N2_mcause
 | Auxiliary function to display mcause fields of Nuclei N2xx
 end
 
+
+define reg_rv32N2_systimer_old
+
+    printf "\n"
+    printf "msip: x%X, mstop: x%X\n", \
+        (($msip) & 0x1), ($mstop & 0x1)
+    printf "mtimecmp= x%X, mtime= x%X\n", \
+        ($mtimecmp & 0xFFFFFF), $mtime
+
+
+end
+document reg_rv32N2_systimer_old
+Syntax: reg_rv32N2_mtimer
+| Auxiliary function to display mtimer of Nuclei N2xx
+end
+
+
 define reg_rv32N2_systimer
     printf "======== SysTimer Reg (N2xx) ======\n"
     if $argc != 0
