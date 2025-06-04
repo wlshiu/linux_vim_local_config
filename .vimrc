@@ -31,6 +31,8 @@ Plug 'vim-scripts/AutoComplPop'
 Plug 'tell-k/vim-autopep8'
 Plug 'henry-hsieh/riscv-asm-vim'
 
+Plug 'kqito/vim-easy-replace'
+
 Plug 'lazywei/vim-doc-tw'
 
 "// files diff plug-in
@@ -784,6 +786,10 @@ let g:doxygen_enhanced_color = 1
 "----------- riscv-asm-vim ------ {{{1
 let g:riscv_asm_isa = "rv32gc"
 " add '// vim: ft=riscv_asm' to the end of asm file of RISC-V
+" }}}
+
+"----------- vim-easy-replace ------ {{{1
+let g:easy_replace_enable = 1
 " }}}
 
 "======================================================================
