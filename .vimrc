@@ -32,6 +32,7 @@ Plug 'tell-k/vim-autopep8'
 Plug 'henry-hsieh/riscv-asm-vim'
 
 Plug 'kqito/vim-easy-replace'
+Plug 'dkprice/vim-easygrep'
 
 Plug 'lazywei/vim-doc-tw'
 
@@ -217,6 +218,11 @@ set mouse=a
 
 "// disable ATL key
 " set winaltkeys=no
+
+"// Ignore the .git directory and its contents
+set wildignore+=.git/**
+set wildignore+=.svn/**
+set wildignore+=out/**
 
 "// change color of status when enter insert mode
 if version >= 700
@@ -539,10 +545,6 @@ endif
     "// <Leader>gj to searching
 " }}}1
 
-" ----------- buffergator ------ {{{1
-    let g:buffergator_viewport_split_policy="T"
-" }}}1
-
 
 " ----------- gutentags ------ {{{1
 "    "/**
@@ -790,6 +792,15 @@ let g:riscv_asm_isa = "rv32gc"
 
 "----------- vim-easy-replace ------ {{{1
 let g:easy_replace_enable = 1
+" }}}
+
+"----------- vim-EasyGrep------ {{{1
+" 0 - vimgrep, 1 - grep
+let g:EasyGrepCommand = 1
+let g:EasyGrepRecursive = 1
+let g:EasyGrepJumpToMatch = 0
+" EasyGrepFilesToExclude be supported when EasyGrepCommand == 1
+let g:EasyGrepFilesToExclude = "tags, *~, *.out, *.a, *.o, *.pyc, *.swp, *.bak, cscope.out, cscope.in.out, cscope.*"
 " }}}
 
 "======================================================================
