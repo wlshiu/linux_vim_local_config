@@ -547,3 +547,30 @@ end
 document hookstoparm
 !!! FOR INTERNAL USE ONLY - DO NOT CALL !!!
 end
+
+define z_set_addr_bits
+    if $argc == 4
+        set $_mask = ((1 << ($arg2)) - 1) << ($arg1)
+        set *(unsigned int*)($arg0) = (*(unsigned int*)($arg0) & ~($_mask)) | ((($arg3) << ($arg1)) & ($_mask))
+    else
+        printf "argv: <ADDR> <bit-offset> <bit-width> <bits-value>\n"
+    end
+end
+document z_set_addr_bits
+Syntax: z_set_addr_bits <ADDR> <bit-offset> <bit-width> <bits-value>
+| Set the bit-field of the target register
+end
+
+define z_set_var_bits
+    if $argc == 4
+        set $_mask = ((1 << ($arg2)) - 1) << ($arg1)
+        set ($arg0) = (($arg0) & ~($_mask)) | ((($arg3) << ($arg1)) & ($_mask))
+    else
+        printf "argv: <Var-Name> <bit-offset> <bit-width> <bits-value>\n"
+    end
+end
+document z_set_var_bits
+Syntax: z_set_var_bits <Var-Name> <bit-offset> <bit-width> <bits-value>
+| Set the bit-field of the target variable
+end
+
