@@ -54,6 +54,7 @@ set nocompatible
 "// filetype
 filetype plugin indent on
 set fileformat=unix
+set modeline
 
 "// show ^M
 set ffs=unix
