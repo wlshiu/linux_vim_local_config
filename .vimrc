@@ -54,7 +54,10 @@ set nocompatible
 "// filetype
 filetype plugin indent on
 set fileformat=unix
-set modeline
+
+"// check the vim setting at head 5 lines of a file 
+"// e.g. `// vim: ....`
+set modelines=5
 
 "// show ^M
 set ffs=unix
@@ -427,6 +430,16 @@ endif
         \ ]
         \}
 
+    let g:tagbar_type_scala = {
+        \ 'ctagstype' : 'Scala',
+        \ 'kinds'     : [
+            \ 'c:classes',
+            \ 'o:objects',
+            \ 't:traits',
+            \ 'm:methods',
+            \ 'v:variables'
+        \ ]
+    \ }
 
     "// hot key
     nmap tl :TagbarToggle<CR>
@@ -607,7 +620,7 @@ endif
     " /**
     "  * user 'rg --type-list' to list support type
     "  */
-    let g:rg_command = g:rg_binary . ' -p -Thtml -g !tags -g !ID -g !GPATH -g !GRTAGS -g !GTAGS -g !*cscope* -g !.git --vimgrep'
+    let g:rg_command = g:rg_binary . ' -p -Thtml -g !out -g !output -g !tags -g !ID -g !GPATH -g !GRTAGS -g !GTAGS -g !*cscope* -g !.git --vimgrep'
 
     " /**
     "  * If LeaderF rg search fail, use this plug-in
@@ -801,7 +814,7 @@ let g:EasyGrepCommand = 1
 let g:EasyGrepRecursive = 1
 let g:EasyGrepJumpToMatch = 0
 " EasyGrepFilesToExclude be supported when EasyGrepCommand == 1
-let g:EasyGrepFilesToExclude = "tags, *~, *.out, *.a, *.o, *.pyc, *.swp, *.bak, cscope.out, cscope.in.out, cscope.*"
+let g:EasyGrepFilesToExclude = "out, tags, *~, *.out, *.a, *.o, *.pyc, *.swp, *.bak, cscope.out, cscope.in.out, cscope.*"
 " }}}
 
 "======================================================================
