@@ -464,6 +464,11 @@ ex.
     一樣用 visual mode 選取想要對齊的區域，輸入 \acom or \adec
 
 
+-------------- *NERD-Tree*
+let g:NERDTreeToggle="<F2>"             按 F2 鍵開啟樹狀視圖
+let g:NERDTreeMapActivateNode="<F3>"    使用 F3 尋找樹狀結構中目前開啟的檔案。
+let g:NERDTreeMapPreview="<F4>"         按 F4 查看文件
+
 -------------- *NERD-Commenter*
 在Normal或者Visual 模式下：
 <leader>cA,                 在當前行尾添加註解符，並進入Insert模式
@@ -653,6 +658,75 @@ doxy file >
 
     # 開始取代 (輸入要取代的文字)
     \rc
+<
+
+-------------- *tmux*
+組成元素 >
+    session_0 -> window_0_0
+                    -> pane_0_0_0 (等同一個 terminal)
+                    -> pane_0_0_1
+              -> window_0_1
+
+    session_1 -> window_1_0
+                    -> pane_1_0_0 (等同一個 terminal)
+
+    ps. session 等同一個 remote server,
+        window 等同一個桌面
+        pane 則等同一個 terminal
+<
+
+刪除 tmux server >
+    $ tmux kill-server
+<
+
+Session管理 >
+    # 建立新 session
+    $ tmux
+
+    # list 已存在的 sessions
+    $ tmux ls
+
+    # link 已存在的 sessions, 編號從 tmux ls 獲得
+    $ tmux attach -t <編號>
+
+    # delete 已存在的 sessions, 編號從 tmux ls 獲得
+    $ tmux kill-session -t <name>
+
+    # rename 已存在的 sessions
+    $ tmux rename-session -t <old name> <new name>
+<
+
+prefix-key (default) >
+    # 要先執行完 prefix-key 再按其他指令, 不要一起按
+    ctrl + b (C-B)
+<
+
+
+split window >
+    # 目前 window 垂直分割(產生 a pane)
+    C-B + | (自訂)
+
+    # 目前 window 水平分割(產生 a pane)
+    C-B + - (自訂)
+
+    # 刪除目前的 pane
+    C-B + x
+        or
+    $ exit
+
+<
+
+Panes 之間移動 >
+    C-B h
+    C-B j
+    C-B k
+    C-B l
+<
+
+調整 Pane 的大小 >
+    C-B + 方向鍵 # C + 方向鍵 ?
+        or
+    shift + 方向鍵 (自訂)
 <
 
 ==============================================================================
