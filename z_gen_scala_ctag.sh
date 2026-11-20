@@ -21,4 +21,4 @@ EOF
 fi
 
 # Universal-Ctags supports scala language
-ctags --quiet -R --languages=Scala --exclude=target --exclude=.bloop . -f tags.scala
+ctags --quiet -R -f tags.scala --languages=Scala --exclude=target --exclude=.bloop .
